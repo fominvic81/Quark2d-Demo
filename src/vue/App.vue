@@ -2,6 +2,22 @@
     <div id="app" class="noselect">
         <div class="head">
             <div class="head-left">
+                <div class="button" @click="togglePlay" title="Use 'p'">
+                    <svg fill="#a0a0a0" width="100%" height="100%" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                        <path v-if="paused" d="M11,10 L18,13.74 18,22.28 11,26 M18,13.74 L26,18 26,18 18,22.28"></path>
+                        <path v-else d="M11,10 L17,10 17,26 11,26 M20,10 L26,10 26,26 20,26"></path>
+                    </svg>
+                </div>
+                <div class="button" @click="singleStep" title="Use 'o'">
+                    <svg fill="#a0a0a0" width="16px" height="16px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="margin: 7px;">
+                        <path d="M0,256L256,0v128L128,256l128,128v128L0,256z M512,512V384L384,256l128-128V0L256,256L512,512z" transform="rotate(180, 256, 256)"></path>
+                    </svg>
+                </div>
+                <div class="button" @click="onRestart" title="Use 'r'">
+                    <svg fill="#a0a0a0" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="margin: 3px;">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
+                    </svg>
+                </div>
             </div>
             <div class="head-center">
                 <select class="demo-select" @change="selectDemo">
@@ -32,6 +48,7 @@
                 <label class="option-name" for="showSleeping">showSleeping</label>
             </div>
         </div>
+        <input id="focus" type="text" style="position: absolute; opacity: 0;">
     </div>
 </template>
 
@@ -42,23 +59,56 @@ export default {
     props: {
         onSelectDemo: {
             type: Function,
-            requires: true
+            requires: true,
         },
+        onTogglePlay: {
+            type: Function,
+            requires: true,
+        },
+        onRestart: {
+            type: Function,
+            requires: true,
+        },
+        onSingleStep: {
+            type: Function,
+            requires: true,
+        }
     },
     data () {
         return {
             codeUrl: 'https://github.com/fominvic81/Quark2d-Demo',
             demos: Demos,
+            paused: false,
         }
     },
     methods: {
         selectDemo (event) {
             this.onSelectDemo(event.target.value);
             this.codeUrl = DemoByName.get(event.target.value).getUrl();
+        },
+        togglePlay () {
+            this.paused = !this.paused;
+            this.onTogglePlay(this.paused);
+        },
+        singleStep () {
+            if (!this.paused) {
+                this.togglePlay();
+            }
+            this.onSingleStep();
         }
     },
     created () {
         this.codeUrl = Demos[0].getUrl();
+        window.addEventListener('keydown', (event) => {
+            document.getElementById("focus").focus();
+            if (event.key === 'p') {
+                this.togglePlay();
+            } else if (event.key === 'o') {
+                this.singleStep();
+            } else if (event.key === 'r') {
+                this.onRestart();
+            }
+        });
     }
 }
 
@@ -103,6 +153,17 @@ export default {
     justify-content: flex-end;
 }
 
+.button {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    transition: all .3s;
+}
+
+.button:hover {
+    background-color: rgb(0, 60, 60);
+}
+
 .code {
     font-size: 20px;
     text-decoration: none;
@@ -113,7 +174,7 @@ export default {
 }
 
 .code:hover {
-    background-color: rgba(0, 60, 60, 1);
+    background-color: rgb(0, 60, 60);
 }
 
 .demo-select {
