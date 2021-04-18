@@ -37,8 +37,8 @@ export default class ConveyorBelt extends Demo {
 
         engine.world.addBody(Factory.Body.rectangle(new Vector(0, 5), 0, 50, 1, {type: BodyType.static}));
 
-        const conveyorBelt1 = Factory.Body.rectangle(new Vector(-15, -5), 0, 20, 1, {type: BodyType.static}, {surfaceVelocity: 0.05});
-        engine.world.add(conveyorBelt1);
+        const conveyorBelt = Factory.Body.rectangle(new Vector(-15, -5), 0, 20, 1, {type: BodyType.static}, {surfaceVelocity: 0.05});
+        engine.world.add(conveyorBelt);
 
         for (let i = 0; i < 5; ++i) {
             engine.world.addBody(Factory.Body.rectangle(new Vector(i * 2 - 20, -8), 0, 1, 1));

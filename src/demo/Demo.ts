@@ -10,6 +10,6 @@ export abstract class Demo {
     abstract create (element: HTMLElement): {engine: Engine, runner: Runner, render: Render};
 
     getUrl () {
-        return `https://github.com/fominvic81/Quark2d-Demo/blob/master/src/demos/${this.options.name}`;
+        return `https://github.com/fominvic81/Quark2d-Demo/blob/master/src/demos/${this.options.name}.ts`;
     }
 }

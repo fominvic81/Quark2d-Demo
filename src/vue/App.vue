@@ -36,26 +36,29 @@
 </template>
 
 <script>
+import { Demos, DemoByName } from '../demos/Demos';
 
 export default {
     props: {
-        demos: {
-            type: Array,
-            required: true,
-        },
         onSelectDemo: {
             type: Function,
             requires: true
         },
-        codeUrl: {
-            type: String,
-            required: true,
+    },
+    data () {
+        return {
+            codeUrl: 'https://github.com/fominvic81/Quark2d-Demo',
+            demos: Demos,
         }
     },
     methods: {
         selectDemo (event) {
             this.onSelectDemo(event.target.value);
+            this.codeUrl = DemoByName.get(event.target.value).getUrl();
         }
+    },
+    created () {
+        this.codeUrl = Demos[0].getUrl();
     }
 }
 
