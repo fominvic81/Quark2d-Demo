@@ -13,7 +13,7 @@ import { Render } from 'quark2d-pixi';
 import { Demo } from '../demo/Demo';
 
 
-export default class Pool extends Demo {
+export default class extends Demo {
     static options = {
         name: 'Pool',
         fileName: 'Pool',

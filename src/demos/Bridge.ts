@@ -18,7 +18,7 @@ import { Demo } from '../demo/Demo';
 import { utils } from 'pixi.js';
 
 
-export default class Bridge extends Demo {
+export default class extends Demo {
     static options = {
         name: 'Bridge',
         fileName: 'Bridge',

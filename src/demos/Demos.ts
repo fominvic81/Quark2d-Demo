@@ -3,6 +3,7 @@ import Pool from './Pool';
 import Bridge from './Bridge';
 import ConveyorBelt from './ConveyorBelt';
 import Pyramid from './Pyramid';
+import Friction from './Friction';
 
 
 export const Demos = [
@@ -10,6 +11,7 @@ export const Demos = [
     Bridge,
     ConveyorBelt,
     Pyramid,
+    Friction,
 ];
 
 export const DemoByName: Map<string, new (element: HTMLElement) => Demo> = new Map();

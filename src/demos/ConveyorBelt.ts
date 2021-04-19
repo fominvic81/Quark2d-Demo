@@ -15,7 +15,7 @@ import { Demo } from '../demo/Demo';
 import { utils } from 'pixi.js';
 
 
-export default class ConveyorBelt extends Demo {
+export default class extends Demo {
     static options = {
         name: 'Conveyor belt',
         fileName: 'ConveyorBelt',

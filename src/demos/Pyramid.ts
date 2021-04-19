@@ -14,7 +14,7 @@ import { Render } from 'quark2d-pixi';
 import { Demo } from '../demo/Demo';
 
 
-export default class Pyramid extends Demo {
+export default class extends Demo {
     static options = {
         name: 'Pyramid',
         fileName: 'Pyramid',
