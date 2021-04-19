@@ -60,6 +60,7 @@ export class App {
         this.demoName = Demos[0].options.name;
         this.demo = new Demos[0](<HTMLElement>document.getElementById('canvas-container'));
         this.vueCallback.setRenderOptions(this.demo.render.options);
+        this.updatePaused();
     }
 
     setDemo (demo: string) {

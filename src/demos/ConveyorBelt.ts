@@ -70,7 +70,6 @@ export default class extends Demo {
             render.update();
         });
         runner.runRender();
-        runner.run();
 
         this.engine = engine;
         this.runner = runner;
