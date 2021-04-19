@@ -38,7 +38,7 @@ export default class Bridge extends Demo {
             width: element.clientWidth,
             height: element.clientHeight,
             colors: {
-                dynamic: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.45, 0.45, 0.45]) : Render.randomColor(),
+                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.45, 0.45, 0.45]) : Render.randomColor(),
             }
         });
 

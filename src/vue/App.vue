@@ -21,7 +21,7 @@
             </div>
             <div class="head-center">
                 <select class="demo-select" @change="selectDemo">
-                    <option v-for="demo in demos"> {{ demo.options.name }} </option>
+                    <option v-for="(demo, index) in demos" :key="index"> {{ demo.options.name }} </option>
                 </select>
                 <a class="code" :href="codeUrl" target="_blank"> { } </a>
             </div>
@@ -29,23 +29,17 @@
             </div>
         </div>
         <div id="canvas-container">
-            
         </div>
         <div class="options">
             <div class="folder-name">Engine</div>
-            <div class="option">
-                <input class="checkbox" type="checkbox" id="sleeping">
-                <label class="option-name" for="sleeping">Sleeping</label>
-            </div>
+
             <div class="folder-name">Render</div>
-            <div class="option">
-                <input class="checkbox" type="checkbox" id="showCollisions">
-                <label class="option-name" for="showCollisions">showCollisions</label>
-            </div>
-            <div class="option">
-                <input class="checkbox" type="checkbox" id="showSleeping">
-                <label class="option-name" for="showSleeping">showSleeping</label>
-            </div>
+            <template v-for="(value, option) in renderOptions">
+                <div class="option" :key="option">
+                    <input class="checkbox" type="checkbox" :id="option" @change="setRenderOption" :checked="value">
+                    <label class="option-name" :for="option">{{ option }}</label>
+                </div>
+            </template>
         </div>
         <input id="focus" type="text" style="position: absolute; opacity: 0;">
     </div>
@@ -56,28 +50,46 @@ import { Demos, DemoByName } from '../demos/Demos';
 
 export default {
     props: {
+        callback: {
+            type: Function,
+            required: true,
+        },
         onSelectDemo: {
             type: Function,
-            requires: true,
+            required: true,
         },
         onTogglePlay: {
             type: Function,
-            requires: true,
+            required: true,
         },
         onRestart: {
             type: Function,
-            requires: true,
+            required: true,
         },
         onSingleStep: {
             type: Function,
-            requires: true,
-        }
+            required: true,
+        },
+        onSetRenderOption: {
+            type: Function,
+            required: true,
+        },
     },
     data () {
         return {
             codeUrl: 'https://github.com/fominvic81/Quark2d-Demo',
             demos: Demos,
             paused: false,
+            renderOptions: {
+                showCollisions: false,
+                showSleeping: false,
+                showConstraints: false,
+            },
+            setRenderOptions: (options) => {
+                for (const option of Object.entries(options)) {
+                    this.renderOptions[option[0]] = option[1];
+                }
+            }
         }
     },
     methods: {
@@ -94,7 +106,13 @@ export default {
                 this.togglePlay();
             }
             this.onSingleStep();
-        }
+        },
+        setRenderOption (event) {
+            const option = event.target.id;
+            const value = event.target.checked
+            this.onSetRenderOption(option, value);
+            this.renderOptions[option] = value;
+        },
     },
     created () {
         this.codeUrl = Demos[0].getUrl();
@@ -107,6 +125,9 @@ export default {
             } else if (event.key === 'r') {
                 this.onRestart();
             }
+        });
+        this.callback({
+            setRenderOptions: this.setRenderOptions,
         });
     }
 }

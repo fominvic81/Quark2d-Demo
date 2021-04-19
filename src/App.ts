@@ -19,12 +19,16 @@ export class App {
     demoName: string;
     vue: Vue;
     paused: boolean = false;
+    vueCallback: any;
 
     constructor () {
-
+        
         const context = {
             props: {
                 demos: Demos,
+                callback: (vueCallback: any) => {
+                    this.vueCallback = vueCallback;
+                },
                 onSelectDemo: (demo: string) => {
                     this.setDemo(demo);
                 },
@@ -40,6 +44,10 @@ export class App {
                     this.demo.runner.stop();
                     this.demo.engine.update({delta: this.demo.runner.fixedDelta});
                 },
+                onSetRenderOption: (option: string, value: boolean) => {
+                    // @ts-ignore
+                    this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)](value);
+                },
                 codeUrl: Demos[0].getUrl(),
             },
         };
@@ -51,31 +59,35 @@ export class App {
 
         this.demoName = Demos[0].options.name;
         this.demo = new Demos[0](<HTMLElement>document.getElementById('canvas-container'));
+        this.vueCallback.setRenderOptions(this.demo.render.options);
     }
 
     setDemo (demo: string) {
-        this.demo.render.renderer.destroy();
-        this.demo.render.stage.destroy();
-        this.demo.render.mouse.removeListeners();
-        this.demo.render.canvas.remove();
+        if (this.demo) {
+            this.demo.render.renderer.destroy();
+            this.demo.render.stage.destroy();
+            this.demo.render.mouse.removeListeners();
+            this.demo.render.canvas.remove();
 
-        for (const g in this.demo.render) {
-            // @ts-ignore
-            delete this.demo.render[g];
-        }
-        this.demo.runner.stop();
-        this.demo.runner.stopRender();
+            for (const g in this.demo.render) {
+                // @ts-ignore
+                delete this.demo.render[g];
+            }
+            this.demo.runner.stop();
+            this.demo.runner.stopRender();
 
-        for (const g in this.demo.runner) {
-            // @ts-ignore
-            delete this.demo.runner[g];
-        }
-        for (const g in this.demo.engine) {
-            // @ts-ignore
-            delete this.demo.engine[g];
+            for (const g in this.demo.runner) {
+                // @ts-ignore
+                delete this.demo.runner[g];
+            }
+            for (const g in this.demo.engine) {
+                // @ts-ignore
+                delete this.demo.engine[g];
+            }
         }
         this.demo = new (<new (element: HTMLElement) => Demo>DemoByName.get(demo))(<HTMLElement>document.getElementById('canvas-container'));
         this.demoName = (<typeof Demo><unknown>DemoByName.get(demo)).options.name;
+        this.vueCallback.setRenderOptions(this.demo.render.options);
 
         this.updatePaused();
     }

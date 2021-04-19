@@ -35,7 +35,7 @@ export default class ConveyorBelt extends Demo {
             width: element.clientWidth,
             height: element.clientHeight,
             colors: {
-                dynamic: (shape: Shape) => (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
+                shape: (shape: Shape) => (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
             }
         });
 
