@@ -4,6 +4,11 @@ import Bridge from './Bridge';
 import ConveyorBelt from './ConveyorBelt';
 import Pyramid from './Pyramid';
 import Friction from './Friction';
+import NewtonsCradle from './NewtonsCradle';
+import Chains from './Chains';
+import Stacking from './Stacking';
+import DoublePendulum from './DoublePendulum';
+import Tumbler from './Tumbler';
 
 
 export const Demos = [
@@ -12,6 +17,11 @@ export const Demos = [
     ConveyorBelt,
     Pyramid,
     Friction,
+    NewtonsCradle,
+    Chains,
+    Stacking,
+    DoublePendulum,
+    Tumbler,
 ];
 
 export const DemoByName: Map<string, new (element: HTMLElement) => Demo> = new Map();
