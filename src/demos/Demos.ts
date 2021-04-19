@@ -6,13 +6,13 @@ import Pyramid from './Pyramid';
 
 
 export const Demos = [
-    new Pool(),
-    new Bridge(),
-    new ConveyorBelt(),
-    new Pyramid(),
+    Pool,
+    Bridge,
+    ConveyorBelt,
+    Pyramid,
 ];
 
-export const DemoByName: Map<string, Demo> = new Map();
+export const DemoByName: Map<string, new (element: HTMLElement) => Demo> = new Map();
 
 for (const demo of Demos) {
     DemoByName.set(demo.options.name, demo);

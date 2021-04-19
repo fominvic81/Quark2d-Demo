@@ -2,14 +2,17 @@ import { Engine, Runner } from 'quark2d';
 import { Render } from 'quark2d-pixi';
 
 export abstract class Demo {
-    options = {
+    static options = {
         name: 'name',
         info: '',
     };
+    abstract engine: Engine;
+    abstract runner: Runner;
+    abstract render: Render;
 
-    abstract create (element: HTMLElement): {engine: Engine, runner: Runner, render: Render};
+    constructor (element: HTMLElement) {}
 
-    getUrl () {
+    static getUrl () {
         return `https://github.com/fominvic81/Quark2d-Demo/blob/master/src/demos/${this.options.name}.ts`;
     }
 }

@@ -19,12 +19,16 @@ import { utils } from 'pixi.js';
 
 
 export default class Bridge extends Demo {
-    options = {
+    static options = {
         name: 'Bridge',
         info: '',
     }
+    engine: Engine;
+    runner: Runner;
+    render: Render;
 
-    create (element: HTMLElement) {
+    constructor (element: HTMLElement) {
+        super(element);
 
         const engine = new Engine();
         engine.sleeping.type = SleepingType.NO_SLEEPING;
@@ -90,10 +94,8 @@ export default class Bridge extends Demo {
         runner.runRender();
         runner.run();
 
-        return {
-            engine,
-            render,
-            runner,
-        }
+        this.engine = engine;
+        this.runner = runner;
+        this.render = render;
     }
 }

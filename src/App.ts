@@ -50,7 +50,7 @@ export class App {
         });
 
         this.demoName = Demos[0].options.name;
-        this.demo = Demos[0].create(<HTMLElement>document.getElementById('canvas-container'));
+        this.demo = new Demos[0](<HTMLElement>document.getElementById('canvas-container'));
     }
 
     setDemo (demo: string) {
@@ -74,8 +74,8 @@ export class App {
             // @ts-ignore
             delete this.demo.engine[g];
         }
-        this.demo = (<Demo>DemoByName.get(demo)).create(<HTMLElement>document.getElementById('canvas-container'));
-        this.demoName = (<Demo>DemoByName.get(demo)).options.name;
+        this.demo = new (<new (element: HTMLElement) => Demo>DemoByName.get(demo))(<HTMLElement>document.getElementById('canvas-container'));
+        this.demoName = (<typeof Demo><unknown>DemoByName.get(demo)).options.name;
 
         this.updatePaused();
     }
