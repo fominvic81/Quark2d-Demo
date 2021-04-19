@@ -17,6 +17,7 @@ import { Demo } from '../demo/Demo';
 export default class Pyramid extends Demo {
     static options = {
         name: 'Pyramid',
+        fileName: 'Pyramid',
         info: '',
     }
     engine: Engine;

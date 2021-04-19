@@ -21,6 +21,7 @@ import { utils } from 'pixi.js';
 export default class Bridge extends Demo {
     static options = {
         name: 'Bridge',
+        fileName: 'Bridge',
         info: '',
     }
     engine: Engine;

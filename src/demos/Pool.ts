@@ -16,6 +16,7 @@ import { Demo } from '../demo/Demo';
 export default class Pool extends Demo {
     static options = {
         name: 'Pool',
+        fileName: 'Pool',
         info: '',
     }
     engine: Engine;

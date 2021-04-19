@@ -4,6 +4,7 @@ import { Render } from 'quark2d-pixi';
 export abstract class Demo {
     static options = {
         name: 'name',
+        fileName: 'fileName',
         info: '',
     };
     abstract engine: Engine;
@@ -13,6 +14,6 @@ export abstract class Demo {
     constructor (element: HTMLElement) {}
 
     static getUrl () {
-        return `https://github.com/fominvic81/Quark2d-Demo/blob/master/src/demos/${this.options.name}.ts`;
+        return `https://github.com/fominvic81/Quark2d-Demo/blob/master/src/demos/${this.options.fileName}.ts`;
     }
 }

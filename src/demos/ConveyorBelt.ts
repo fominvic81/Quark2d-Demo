@@ -17,7 +17,8 @@ import { utils } from 'pixi.js';
 
 export default class ConveyorBelt extends Demo {
     static options = {
-        name: 'ConveyorBelt',
+        name: 'Conveyor belt',
+        fileName: 'ConveyorBelt',
         info: '',
     }
     engine: Engine;
