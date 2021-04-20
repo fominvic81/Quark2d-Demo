@@ -37,6 +37,7 @@ export default class extends Demo {
             height: element.clientHeight,
             colors: {
                 shape: (shape: Shape) => (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
+                shapeOutline: (shape: Shape) => (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
             }
         });
 
@@ -62,7 +63,7 @@ export default class extends Demo {
 
             if (timer > 1) {
                 timer -= 1;
-                const radius = Math.round(Math.random() * 2) / 10;
+                const radius = Math.round(Math.random() * 2) / 10 + 0.01;
                 engine.world.addBody(Factory.Body.polygon(new Vector(-20, -8), Math.ceil(Math.random() * 4) + 3, 0.6 - radius, {}, {radius}));
             }
         });

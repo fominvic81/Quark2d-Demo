@@ -39,7 +39,8 @@ export default class extends Demo {
             width: element.clientWidth,
             height: element.clientHeight,
             colors: {
-                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.45, 0.45, 0.45]) : Render.randomColor(),
+                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
+                shapeOutline: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
             }
         });
 

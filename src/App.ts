@@ -44,7 +44,13 @@ export class App {
                 },
                 onSetRenderOption: (option: string, value: boolean) => {
                     // @ts-ignore
-                    this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)](value);
+                    if (this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)]) {
+                        // @ts-ignore
+                        this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)](value);
+                    } else {
+                        // @ts-ignore
+                        this.demo.render.options[option] = value;
+                    }
                 },
                 onSetSleeping: (type: number) => {
                     this.demo.engine.sleeping.setType(type);

@@ -37,6 +37,7 @@ export default class extends Demo {
             height: element.clientHeight,
             colors: {
                 shape: () => utils.rgb2hex([0.4, 0.4, 0.4]),
+                shapeOutline: () => utils.rgb2hex([0.4, 0.4, 0.4]),
             },
         });
 
