@@ -7100,6 +7100,13 @@ quark2d@^2.0.8:
   dependencies:
     poly-decomp "^0.3.0"
 
+quark2d@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/quark2d/-/quark2d-2.1.0.tgz#d23bedb3f6bc3196e5aa6177072a5b42c962082e"
+  integrity sha512-cvbC90EGb1JGG/OzK5D/EL6VUYHsB7TqUhcltBVMTwmTwgJ8QqUHrGetUyXxllqgTSdHtncgufvHRB9d6pUkdg==
+  dependencies:
+    poly-decomp "^0.3.0"
+
 query-string@^5.0.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-5.1.1.tgz#a78c012b71c17e05f2e3fa2319dd330682efb3cb"

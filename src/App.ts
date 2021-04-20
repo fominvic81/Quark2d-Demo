@@ -1,14 +1,12 @@
 import {
     Engine,
     Runner,
-    SleepingType
 } from 'quark2d';
 import { Render } from 'quark2d-pixi';
 import { DemoByName, Demos } from './demos/Demos';
 import Vue from 'vue';
 import vueApp from './vue/App.vue';
 import { Demo } from './demo/Demo';
-
 
 
 export class App {
@@ -49,7 +47,7 @@ export class App {
                     this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)](value);
                 },
                 onSetSleeping: (type: number) => {
-                    this.demo.engine.sleeping.type = type;
+                    this.demo.engine.sleeping.setType(type);
                 },
                 codeUrl: Demos[0].getUrl(),
             },
