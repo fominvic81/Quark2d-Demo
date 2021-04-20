@@ -74,8 +74,8 @@ export default class extends Demo {
         engine.world.add(constraint);
 
         for (let i = 0; i < 8; ++i) {
-            for (let j = 0; j < 5; ++j) {
-                engine.world.add(Factory.Body.rectangle(new Vector(i - 4.5, j - 5), 0, 1, 1));
+            for (let j = 0; j < 6; ++j) {
+                engine.world.add(Factory.Body.rectangle(new Vector(i - 4.5, j - 6), 0, 1, 1));
             }
         }
 

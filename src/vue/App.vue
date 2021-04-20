@@ -2,25 +2,25 @@
     <div id="app" class="noselect">
         <div class="head">
             <div class="head-left">
-                <div class="button" @click="togglePlay" title="Use 'p'">
+                <div class="button" @click="togglePlay" title="Play/Pause(p)">
                     <svg fill="#a0a0a0" width="100%" height="100%" viewBox="0 0 36 36">
                         <path v-if="paused" d="M11,10 L18,13.74 18,22.28 11,26 M18,13.74 L26,18 26,18 18,22.28"></path>
                         <path v-else d="M11,10 L17,10 17,26 11,26 M20,10 L26,10 26,26 20,26"></path>
                     </svg>
                 </div>
-                <div class="button" @click="singleStep" title="Use 'o'">
+                <div class="button" @click="singleStep" title="Single step(o)">
                     <svg fill="#a0a0a0" width="16px" height="16px" viewBox="0 0 512 512" style="margin: 7px;">
                         <path d="M0,256L256,0v128L128,256l128,128v128L0,256z M512,512V384L384,256l128-128V0L256,256L512,512z" transform="rotate(180, 256, 256)"></path>
                     </svg>
                 </div>
-                <div class="button" @click="onRestart" title="Use 'r'">
+                <div class="button" @click="onRestart" title="Restart(r)">
                     <svg fill="#a0a0a0" width="24px" height="24px" viewBox="0 0 24 24" style="margin: 3px;">
                         <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
                     </svg>
                 </div>
             </div>
             <div class="head-center">
-                <select class="demo-select" @change="selectDemo">
+                <select class="demo-select" @change="(e) => {onSelectDemo(e.target.value)}">
                     <option v-for="(demo, index) in demos" :key="index"> {{ demo.options.name }} </option>
                 </select>
                 <a class="code" :href="codeUrl" target="_blank"> { } </a>
@@ -32,7 +32,14 @@
         </div>
         <div class="options">
             <div class="folder-name">Engine</div>
-
+            <div class="option">
+                <select class="sleeping-select" id="sleeping-select" v-model="sleeping" @change="onSetSleeping(sleeping)">
+                    <option :value="SleepingType.NO_SLEEPING">No sleeping</option>
+                    <option :value="SleepingType.BODY_SLEEPING">Body sleeping</option>
+                    <option :value="SleepingType.ISLAND_SLEEPING" disabled>Island sleeping</option>
+                </select>
+                <label class="option-name" for="sleeping-select">Sleeping</label>
+            </div>
             <div class="folder-name">Render</div>
             <template v-for="(value, option) in renderOptions">
                 <div class="option" :key="option">
@@ -46,7 +53,8 @@
 </template>
 
 <script>
-import { Demos, DemoByName } from '../demos/Demos';
+import { Demos } from '../demos/Demos';
+import { SleepingType } from 'quark2d';
 
 export default {
     props: {
@@ -74,6 +82,10 @@ export default {
             type: Function,
             required: true,
         },
+        onSetSleeping: {
+            type: Function,
+            required: true,
+        },
     },
     data () {
         return {
@@ -85,18 +97,11 @@ export default {
                 showSleeping: false,
                 showConstraints: false,
             },
-            setRenderOptions: (options) => {
-                for (const option of Object.entries(options)) {
-                    this.renderOptions[option[0]] = option[1];
-                }
-            }
+            sleeping: SleepingType.NO_SLEEPING,
+            SleepingType,
         }
     },
     methods: {
-        selectDemo (event) {
-            this.onSelectDemo(event.target.value);
-            this.codeUrl = DemoByName.get(event.target.value).getUrl();
-        },
         togglePlay () {
             this.paused = !this.paused;
             this.onTogglePlay(this.paused);
@@ -113,9 +118,16 @@ export default {
             this.onSetRenderOption(option, value);
             this.renderOptions[option] = value;
         },
+        changeDemo (demo, constr) {
+            const renderOptions = demo.render.options;
+            for (const option of Object.entries(renderOptions)) {
+                this.renderOptions[option[0]] = option[1];
+            }
+            this.sleeping = demo.engine.sleeping.type;
+            this.codeUrl = constr.getUrl();
+        },
     },
     created () {
-        this.codeUrl = Demos[0].getUrl();
         window.addEventListener('keydown', (event) => {
             document.getElementById("focus").focus();
             if (event.key === 'p') {
@@ -126,9 +138,7 @@ export default {
                 this.onRestart();
             }
         });
-        this.callback({
-            setRenderOptions: this.setRenderOptions,
-        });
+        this.callback(this.changeDemo);
     }
 }
 
@@ -208,7 +218,6 @@ export default {
 
 .demo-select option {
     background-color: rgb(48, 48, 48);
-    color: rgb(160, 160, 160);
 }
 
 .options {
@@ -260,9 +269,22 @@ export default {
     padding-right: 100%;
 }
 
+.sleeping-select {
+    position: absolute;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(160, 160, 160);
+    outline: none;
+    border: none;
+}
+
+.sleeping-select option {
+    background-color: rgb(48, 48, 48);
+}
+
 .checkbox {
     position: absolute;
-    right: 0;
+    right: 4px;
     outline: none;
     border: none;
 }

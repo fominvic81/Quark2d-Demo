@@ -1,6 +1,7 @@
 import {
     Engine,
-    Runner
+    Runner,
+    SleepingType
 } from 'quark2d';
 import { Render } from 'quark2d-pixi';
 import { DemoByName, Demos } from './demos/Demos';
@@ -19,15 +20,14 @@ export class App {
     demoName: string;
     vue: Vue;
     paused: boolean = false;
-    vueCallback: any;
+    changeDemo: {(demo: Demo, constr: new (element: HTMLElement) => Demo): void} = () => {};
 
     constructor () {
-        
         const context = {
             props: {
                 demos: Demos,
-                callback: (vueCallback: any) => {
-                    this.vueCallback = vueCallback;
+                callback: (changeDemo: {(demo: Demo, constr: new (element: HTMLElement) => Demo): void}) => {
+                    this.changeDemo = changeDemo;
                 },
                 onSelectDemo: (demo: string) => {
                     this.setDemo(demo);
@@ -48,6 +48,9 @@ export class App {
                     // @ts-ignore
                     this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)](value);
                 },
+                onSetSleeping: (type: number) => {
+                    this.demo.engine.sleeping.type = type;
+                },
                 codeUrl: Demos[0].getUrl(),
             },
         };
@@ -59,7 +62,7 @@ export class App {
 
         this.demoName = Demos[0].options.name;
         this.demo = new Demos[0](<HTMLElement>document.getElementById('canvas-container'));
-        this.vueCallback.setRenderOptions(this.demo.render.options);
+        this.changeDemo(this.demo, Demos[0]);
         this.updatePaused();
     }
 
@@ -88,8 +91,7 @@ export class App {
         }
         this.demo = new (<new (element: HTMLElement) => Demo>DemoByName.get(demo))(<HTMLElement>document.getElementById('canvas-container'));
         this.demoName = (<typeof Demo><unknown>DemoByName.get(demo)).options.name;
-        this.vueCallback.setRenderOptions(this.demo.render.options);
-
+        this.changeDemo(this.demo, <new (element: HTMLElement) => Demo>DemoByName.get(demo));
         this.updatePaused();
     }
 
