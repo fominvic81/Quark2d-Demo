@@ -10,6 +10,7 @@ import Stacking from './Stacking';
 import DoublePendulum from './DoublePendulum';
 import Tumbler from './Tumbler';
 import Sleeping from './Sleeping';
+import WreckingBall from './WreckingBall';
 
 
 export const Demos = [
@@ -24,6 +25,7 @@ export const Demos = [
     DoublePendulum,
     Tumbler,
     Sleeping,
+    WreckingBall,
 ];
 
 export const DemoByName: Map<string, new (element: HTMLElement) => Demo> = new Map();
