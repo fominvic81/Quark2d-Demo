@@ -26,6 +26,7 @@
                 <a class="code" :href="codeUrl" target="_blank"> { } </a>
             </div>
             <div class="head-right">
+                
             </div>
         </div>
         <div id="canvas-container">
@@ -39,6 +40,20 @@
                     <option :value="SleepingType.ISLAND_SLEEPING" disabled>Island sleeping</option>
                 </select>
                 <label class="option-name" for="sleeping-select">Sleeping</label>
+            </div>
+            <div class="option">
+                <a class="option-name">GravityX</a>
+                <div class="coord-container">
+                    <input class="coord" type="number" :value="gravity.x" disabled>
+                    <input class="coord-range" type="range" v-model="gravity.x" min="-20" max="20" step="1">
+                </div>
+            </div>
+            <div class="option">
+                <a class="option-name">GravityY</a>
+                <div class="coord-container">
+                    <input class="coord" type="number" :value="gravity.y" disabled>
+                    <input class="coord-range" type="range" v-model="gravity.y" min="-20" max="20" step="1">
+                </div>
             </div>
             <div class="folder-name">Render</div>
             <template v-for="(value, option) in renderOptions">
@@ -54,7 +69,7 @@
 
 <script>
 import { Demos } from '../demos/Demos';
-import { SleepingType } from 'quark2d';
+import { SleepingType, Vector} from 'quark2d';
 
 export default {
     props: {
@@ -102,6 +117,7 @@ export default {
             },
             sleeping: SleepingType.NO_SLEEPING,
             SleepingType,
+            gravity: new Vector(),
         }
     },
     methods: {
@@ -128,6 +144,7 @@ export default {
             }
             this.sleeping = demo.engine.sleeping.type;
             this.codeUrl = constr.getUrl();
+            this.gravity = demo.engine.gravity;
         },
     },
     created () {
@@ -142,7 +159,7 @@ export default {
             }
         });
         this.callback(this.changeDemo);
-    }
+    },
 }
 
 </script scoped>
@@ -250,16 +267,20 @@ export default {
 }
 
 .folder-name {
-    padding: 2px;
-    border-bottom: solid 2px rgb(25, 25, 25);
+    display: flex;
+    align-items: center;
     width: 100%;
+    height: 25px;
     background-color: rgb(40, 40, 40);
     color: rgb(160, 160, 160);
+    border-bottom: solid 2px rgb(25, 25, 25);
 }
 
 .option {
+    display: flex;
+    align-items: center;
     width: 100%;
-    padding: 3px 3px 3px 5px;
+    height: 30px;
     color: rgb(160, 160, 160);
     border-bottom: solid 2px rgb(40, 40, 40);
 }
@@ -269,7 +290,11 @@ export default {
 }
 
 .option-name {
-    padding-right: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-left: 4px;
 }
 
 .sleeping-select {
@@ -292,6 +317,30 @@ export default {
     border: none;
 }
 
+.coord-container {
+    position: absolute;
+    right: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    height: 20px;
+}
+
+.coord-range {
+    width: calc(95% - 20px);
+    height: 80%;
+}
+
+.coord {
+    text-overflow: clip;
+    width: 20px;
+    height: 80%;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(160, 160, 160);
+}
+
 #canvas-container {
     width: 100%;
     height: 100%;
@@ -304,6 +353,29 @@ export default {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+input[type='range'] {
+    overflow: hidden;
+    -webkit-appearance: none;
+    background-color: rgb(80, 80, 100);
+}
+
+input[type='range']::-webkit-slider-thumb {
+    width: 1px;
+    height: 0px;
+    -webkit-appearance: none;
+    box-shadow: -100vw 0 0 100vw rgb(60, 60, 80);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 </style>
