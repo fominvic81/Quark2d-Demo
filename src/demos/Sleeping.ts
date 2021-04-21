@@ -27,7 +27,7 @@ export default class extends Demo {
         super(element);
 
         const engine = new Engine();
-        engine.sleeping.type = SleepingType.BODY_SLEEPING;
+        engine.sleeping.setType(SleepingType.BODY_SLEEPING);
 
         const render = new Render(engine, {
             element: element,
