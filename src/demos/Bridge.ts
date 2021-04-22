@@ -22,7 +22,7 @@ export default class extends Demo {
     static options = {
         name: 'Bridge',
         fileName: 'Bridge',
-        info: '',
+        info: ['Left mouse button to move bodies', 'Right mouse button to move camera', 'Wheel to zoom'],
     }
     engine: Engine;
     runner: Runner;

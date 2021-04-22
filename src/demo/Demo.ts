@@ -2,10 +2,10 @@ import { Engine, Runner } from 'quark2d';
 import { Render } from 'quark2d-pixi';
 
 export abstract class Demo {
-    static options = {
-        name: 'name',
-        fileName: 'fileName',
-        info: '',
+    static options: {
+        name: string;
+        fileName: string;
+        info: string | string[];
     };
     abstract engine: Engine;
     abstract runner: Runner;

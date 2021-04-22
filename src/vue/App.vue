@@ -26,9 +26,15 @@
                 <a class="code" :href="codeUrl" target="_blank"> { } </a>
             </div>
             <div class="head-right">
-                
             </div>
         </div>
+        <a class="info-field">
+            <template v-for="i in info">
+                <div class="info" :key="i">
+                    {{ i }}
+                </div>
+            </template>
+        </a>
         <div id="canvas-container">
         </div>
         <div class="options">
@@ -118,6 +124,7 @@ export default {
             sleeping: SleepingType.NO_SLEEPING,
             SleepingType,
             gravity: new Vector(),
+            info: [''],
         }
     },
     methods: {
@@ -145,6 +152,7 @@ export default {
             this.sleeping = demo.engine.sleeping.type;
             this.codeUrl = constr.getUrl();
             this.gravity = demo.engine.gravity;
+            this.info = Array.isArray(constr.options.info) ? constr.options.info : [constr.options.info];
         },
     },
     created () {
@@ -339,6 +347,16 @@ export default {
     border: none;
     background-color: rgba(0, 0, 0, 0);
     color: rgb(160, 160, 160);
+}
+
+.info-field {
+    position: absolute;
+    top: 45px;
+    left: 3px;
+}
+.info {
+    color: rgb(160, 160, 160);
+    font-size: larger;
 }
 
 #canvas-container {
