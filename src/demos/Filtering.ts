@@ -32,10 +32,10 @@ export default class extends Demo {
         const engine = new Engine();
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
-        const defaultCategory = Filter.nextCategory();
-        const redCategory = Filter.nextCategory();
-        const greenCategory = Filter.nextCategory();
-        const blueCategory = Filter.nextCategory();
+        const defaultCategory = Filter.nextCategory(engine);
+        const redCategory = Filter.nextCategory(engine);
+        const greenCategory = Filter.nextCategory(engine);
+        const blueCategory = Filter.nextCategory(engine);
 
         const def = {
             category: defaultCategory,
