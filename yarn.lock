@@ -7085,10 +7085,10 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-quark2d-pixi@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/quark2d-pixi/-/quark2d-pixi-0.0.8.tgz#23829230713013fab6ccf521c5a8c8bc0fd0eca0"
-  integrity sha512-KUKg8PlUz41pe71uAB6Qu/WWi3hUnFtFfCHquD5gZhk8KfQCp+6O9f3t7LhB3UG1Ye9zpcrOOKtoWWNZGWUmMA==
+quark2d-pixi@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/quark2d-pixi/-/quark2d-pixi-0.0.9.tgz#2877104437646982f91146c6b8c3e302f5bcb673"
+  integrity sha512-aBzr9whOKLJSUHOtTOhIJXCsPgA1r++85aYDgJgV7xeVeLnS2r0hvRniJZgIEXRRE6gi47S3pP2wE7o0VDucGA==
   dependencies:
     pixi.js "^6.0.2"
     quark2d "^2.1.0"

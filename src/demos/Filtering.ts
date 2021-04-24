@@ -74,7 +74,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
-            scale: 15,
+            scale: 20,
 
             colors: {
                 shape: (shape: Shape) =>

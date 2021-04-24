@@ -34,7 +34,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
-            scale: 25,
+            scale: 35,
         });
 
         const tumbler = new Body({type: BodyType.kinematic});

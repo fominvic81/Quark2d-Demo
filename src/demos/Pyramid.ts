@@ -35,6 +35,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
+            scale: 40,
         });
 
         engine.world.add(Factory.Body.rectangle(new Vector(0, 12), 0, 50, 1, {type: BodyType.static}))

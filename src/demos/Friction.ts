@@ -33,7 +33,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
-            scale: 20,
+            scale: 25,
         });
 
         engine.world.add(Factory.Body.rectangle(new Vector(0, 17), -Math.PI * -0.1, 30, 1, {type: BodyType.static}, {friction: Infinity}));

@@ -41,7 +41,7 @@ export default class extends Demo {
                 shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
                 shapeOutline: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
             },
-            scale: 20,
+            scale: 30,
         });
 
         engine.world.add(Factory.Body.rectangle(new Vector(0, 12), 0, 100, 1, {type: BodyType.static}));

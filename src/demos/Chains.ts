@@ -35,6 +35,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
+            scale: 40,
             colors: {
                 shape: () => utils.rgb2hex([0.4, 0.4, 0.4]),
                 shapeOutline: () => utils.rgb2hex([0.4, 0.4, 0.4]),

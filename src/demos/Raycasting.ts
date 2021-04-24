@@ -35,6 +35,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
+            scale: 40,
         });
 
         for (let i = -7; i <= 7; ++i) {

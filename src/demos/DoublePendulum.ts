@@ -33,6 +33,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
+            scale: 40,
         });
 
         const filter = {group: Filter.nextGroup(true)};

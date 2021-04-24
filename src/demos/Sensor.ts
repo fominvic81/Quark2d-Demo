@@ -36,6 +36,7 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
+            scale: 40,
         });
 
         const sensor = Factory.Body.circle(new Vector(), 4, {type: BodyType.static}, {isSensor: true});
