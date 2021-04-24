@@ -74,7 +74,6 @@
 </template>
 
 <script>
-import { Demos } from '../demos/Demos';
 import { SleepingType, Vector} from 'quark2d';
 
 export default {
@@ -111,7 +110,7 @@ export default {
     data () {
         return {
             codeUrl: 'https://github.com/fominvic81/Quark2d-Demo',
-            demos: Demos,
+            demos: [],
             paused: false,
             renderOptions: {
                 showCollisions: false,
@@ -154,6 +153,9 @@ export default {
             this.gravity = demo.engine.gravity;
             this.info = Array.isArray(constr.options.info) ? constr.options.info : [constr.options.info];
         },
+        addDemo (demo) {
+            this.demos.push(demo);
+        }
     },
     created () {
         window.addEventListener('keydown', (event) => {
@@ -166,7 +168,7 @@ export default {
                 this.onRestart();
             }
         });
-        this.callback(this.changeDemo);
+        this.callback(this.changeDemo, this.addDemo);
     },
 }
 

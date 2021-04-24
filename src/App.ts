@@ -3,10 +3,9 @@ import {
     Runner,
 } from 'quark2d';
 import { Render } from 'quark2d-pixi';
-import { DemoByName, Demos } from './demos/Demos';
 import Vue from 'vue';
 import vueApp from './vue/App.vue';
-import { Demo } from './demo/Demo';
+import { Demo, DemoConstructor } from './demo/Demo';
 
 
 export class App {
@@ -18,14 +17,17 @@ export class App {
     demoName: string;
     vue: Vue;
     paused: boolean = false;
-    changeDemo: {(demo: Demo, constr: new (element: HTMLElement) => Demo): void} = () => {};
+    changeDemo: {(demo: Demo, constr: DemoConstructor): void} = () => {};
+    addDemoToVue: {(demo: DemoConstructor): void} = () => {};
+    demos: (DemoConstructor)[] = [];
+    demoByName: Map<string, DemoConstructor> = new Map();
 
-    constructor () {
+    constructor (demos: DemoConstructor[], defaultDemo: DemoConstructor) {
         const context = {
             props: {
-                demos: Demos,
-                callback: (changeDemo: {(demo: Demo, constr: new (element: HTMLElement) => Demo): void}) => {
+                callback: (changeDemo: {(demo: Demo, constr: DemoConstructor): void}, addDemo: {(demo: DemoConstructor): void}) => {
                     this.changeDemo = changeDemo;
+                    this.addDemoToVue = addDemo;
                 },
                 onSelectDemo: (demo: string) => {
                     this.setDemo(demo);
@@ -55,7 +57,8 @@ export class App {
                 onSetSleeping: (type: number) => {
                     this.demo.engine.sleeping.setType(type);
                 },
-                codeUrl: Demos[0].getUrl(),
+                // @ts-ignore
+                codeUrl: defaultDemo.getUrl(),
             },
         };
 
@@ -63,10 +66,13 @@ export class App {
             el: '#vue',
             render: h => h(vueApp, context),
         });
+        
+        this.addDemo(...demos);
 
-        this.demoName = Demos[0].options.name;
-        this.demo = new Demos[0](<HTMLElement>document.getElementById('canvas-container'));
-        this.changeDemo(this.demo, Demos[0]);
+        // @ts-ignore
+        this.demoName = defaultDemo.options.name;
+        this.demo = new defaultDemo(<HTMLElement>document.getElementById('canvas-container'));
+        this.changeDemo(this.demo, defaultDemo);
         this.updatePaused();
     }
 
@@ -93,10 +99,20 @@ export class App {
                 delete this.demo.engine[g];
             }
         }
-        this.demo = new (<new (element: HTMLElement) => Demo>DemoByName.get(demo))(<HTMLElement>document.getElementById('canvas-container'));
-        this.demoName = (<typeof Demo><unknown>DemoByName.get(demo)).options.name;
-        this.changeDemo(this.demo, <new (element: HTMLElement) => Demo>DemoByName.get(demo));
+        // @ts-ignore
+        this.demoName = this.demoByName.get(demo).options.name;
+        this.demo = new (<DemoConstructor>this.demoByName.get(demo))(<HTMLElement>document.getElementById('canvas-container'));
+        this.changeDemo(this.demo, <DemoConstructor>this.demoByName.get(demo));
         this.updatePaused();
+    }
+
+    addDemo (...demos: (DemoConstructor)[]) {
+        for (const demo of demos) {
+            this.demos.push(demo);
+            // @ts-ignore
+            this.demoByName.set(demo.options.name, demo);
+            this.addDemoToVue(demo);
+        }
     }
 
     updatePaused () {

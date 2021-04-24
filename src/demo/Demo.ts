@@ -17,3 +17,5 @@ export abstract class Demo {
         return `https://github.com/fominvic81/Quark2d-Demo/blob/master/src/demos/${this.options.fileName}.ts`;
     }
 }
+
+export type DemoConstructor = new (element: HTMLElement) => Demo;
