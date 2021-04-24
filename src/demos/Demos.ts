@@ -11,6 +11,12 @@ import DoublePendulum from './DoublePendulum';
 import Tumbler from './Tumbler';
 import Sleeping from './Sleeping';
 import WreckingBall from './WreckingBall';
+import Gravity from './Gravity';
+import Drawing from './Drawing';
+import Raycasting from './Raycasting';
+import Filtering from './Filtering';
+import Kinematic from './Kinematic';
+import Sensor from './Sensor';
 
 
 export const Demos = [
@@ -26,6 +32,12 @@ export const Demos = [
     Tumbler,
     Sleeping,
     WreckingBall,
+    Gravity,
+    Drawing,
+    Raycasting,
+    Filtering,
+    Kinematic,
+    Sensor,
 ];
 
 export const DemoByName: Map<string, new (element: HTMLElement) => Demo> = new Map();
