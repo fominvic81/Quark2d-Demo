@@ -1,6 +1,7 @@
 import {
     BodyType,
     DistanceConstraint,
+    PointConstraint,
     Engine,
     Factory,
     Filter,
@@ -57,25 +58,23 @@ export default class extends Demo {
         let bodyA = Factory.Body.capsule(new Vector(-10, -10), Math.PI * 0.5, 1, 0.25, {}, {filter: filterA});
         engine.world.add(bodyA);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             pointA: new Vector(-0.5, 0),
             pointB: new Vector(bodyA.position.x, bodyA.position.y - 0.5),
             stiffness: 1,
-            length: 0,
         }));
 
         for (let i = 1; i <= 20; ++i) {
             const bodyB = Factory.Body.capsule(new Vector(-10, i - 10), Math.PI * 0.5, 1, 0.25, {}, {filter: filterA});
             engine.world.add(bodyB);
 
-            engine.world.add(new DistanceConstraint({
+            engine.world.add(new PointConstraint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(0.5, 0),
                 pointB: new Vector(-0.5, 0),
                 stiffness: 1,
-                length: 0,
             }));
 
             bodyA = bodyB;
@@ -110,25 +109,23 @@ export default class extends Demo {
         bodyA = Factory.Body.capsule(new Vector(10, -10), Math.PI * 0.5, 2, 0.5, {}, {filter: filterC});
         engine.world.add(bodyA);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             pointA: new Vector(-1, 0),
             pointB: new Vector(bodyA.position.x, bodyA.position.y - 1),
             stiffness: 1,
-            length: 0,
         }));
 
         for (let i = 1; i <= 10; ++i) {
             const bodyB = Factory.Body.capsule(new Vector(10, i * 2 - 10), Math.PI * 0.5, 2, 0.5, {}, {filter: filterC});
             engine.world.add(bodyB);
 
-            engine.world.add(new DistanceConstraint({
+            engine.world.add(new PointConstraint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(1, 0),
                 pointB: new Vector(-1, 0),
                 stiffness: 0.05,
-                length: 0,
             }));
 
             bodyA = bodyB;

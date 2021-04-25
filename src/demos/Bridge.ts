@@ -7,6 +7,7 @@ import {
     Filter,
     Mouse,
     MouseConstraint,
+    PointConstraint,
     Runner,
     Shape,
     ShapeType,
@@ -56,7 +57,7 @@ export default class extends Demo {
             const bodyB = Factory.Body.capsule(new Vector(i * 2 - 19.5, 0), 0, 2, 0.5, {velocityDamping: 0.02}, {filter});
             engine.world.add(bodyB);
 
-                const constraint = new DistanceConstraint({
+                const constraint = new PointConstraint({
                     bodyA,
                     bodyB,
                     pointA: bodyA ? new Vector(1, 0) : new Vector(bodyB.position.x - 1, bodyB.position.y),
@@ -67,7 +68,7 @@ export default class extends Demo {
 
             bodyA = bodyB;
         }
-        const constraint = new DistanceConstraint({
+        const constraint = new PointConstraint({
             bodyA,
             pointA: new Vector(1, 0),
             pointB: new Vector((<Body>bodyA).position.x + 1, (<Body>bodyA).position.y),

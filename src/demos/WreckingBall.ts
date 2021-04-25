@@ -6,6 +6,7 @@ import {
     Filter,
     Mouse,
     MouseConstraint,
+    PointConstraint,
     Runner,
     Shape,
     ShapeType,
@@ -57,25 +58,23 @@ export default class extends Demo {
         let bodyA = Factory.Body.capsule(new Vector(-8, -16), 0, 1, 0.25, {}, {filter});
         engine.world.add(bodyA);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             pointA: new Vector(0.5, 0),
             pointB: new Vector(bodyA.position.x + 0.5, bodyA.position.y),
             stiffness: 1,
-            length: 0,
         }));
 
         for (let i = 1; i <= 20; ++i) {
             const bodyB = Factory.Body.capsule(new Vector(-i - 8, -16), 0, 1, 0.25, {}, {filter});
             engine.world.add(bodyB);
 
-            engine.world.add(new DistanceConstraint({
+            engine.world.add(new PointConstraint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(-0.5, 0),
                 pointB: new Vector(0.5, 0),
                 stiffness: 1,
-                length: 0,
             }));
 
             bodyA = bodyB;
@@ -85,7 +84,7 @@ export default class extends Demo {
         ball.setDensity(800);
         engine.world.add(ball);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             bodyB: ball,
             pointA: new Vector(-0.5, 0),

@@ -7,6 +7,7 @@ import {
     Filter,
     Mouse,
     MouseConstraint,
+    PointConstraint,
     Runner,
     Shape,
     ShapeType,
@@ -122,7 +123,7 @@ export default class extends Demo {
         let bodyA = Factory.Body.capsule(new Vector(-10, 0.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}});
         engine.world.add(bodyA);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             bodyB: crane,
             pointA: new Vector(-0.5, 0),
@@ -133,7 +134,7 @@ export default class extends Demo {
             const bodyB = Factory.Body.capsule(new Vector(-10, i + 1.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}});
             engine.world.add(bodyB);
 
-            engine.world.add(new DistanceConstraint({
+            engine.world.add(new PointConstraint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(0.5, 0),
@@ -148,7 +149,7 @@ export default class extends Demo {
         ball.setDensity(800);
         engine.world.add(ball);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             bodyB: ball,
             pointA: new Vector(0.5, 0),

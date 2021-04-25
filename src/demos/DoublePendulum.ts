@@ -5,6 +5,7 @@ import {
     Filter,
     Mouse,
     MouseConstraint,
+    PointConstraint,
     Runner,
     SleepingType,
     Vector,
@@ -43,21 +44,19 @@ export default class extends Demo {
 
         engine.world.add([bodyA, bodyB]);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             bodyB,
             pointA: new Vector(5, 0),
             pointB: new Vector(-5, 0),
             stiffness: 0.5,
-            length: 0,
         }));
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new PointConstraint({
             bodyA,
             pointA: new Vector(-5, 0),
             pointB: new Vector(0, bodyA.position.y - 5),
             stiffness: 0.5,
-            length: 0,
         }));
 
         bodyA.velocity.set(0.8, 0);
