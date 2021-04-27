@@ -38,29 +38,58 @@
         <div id="canvas-container">
         </div>
         <div class="options">
+            <div class="folder-name">Runner</div>
+            <div class="option">
+                <div class="option-name">Runner type</div>
+                <select class="select" v-model="runnerOptions.type" @change="onSetSleeping(sleeping)">
+                    <option :value="RunnerType.fixed">Fixed</option>
+                    <option :value="RunnerType.dynamic">Dynamic</option>
+                </select>
+            </div>
+            <div class="option">
+                <div class="option-name">Timescale</div>
+                <div class="range-container">
+                    <div class="range-value"> {{ runnerOptions.timescale }} </div>
+                    <input class="range-range" type="range" v-model="runnerOptions.timescale" min="0.5" max="5" step="0.25">
+                </div>
+            </div>
+            <div class="option">
+                <input class="checkbox" type="checkbox" id="runner-correction" v-model="runnerOptions.correction">
+                <label class="option-name" for="runner-correction"> Correction(for dynamic) </label>
+            </div>
             <div class="folder-name">Engine</div>
             <div class="option">
-                <select class="sleeping-select" id="sleeping-select" v-model="sleeping" @change="onSetSleeping(sleeping)">
+                <div class="option-name">Sleeping</div>
+                <select class="select" v-model="sleeping" @change="onSetSleeping(sleeping)">
                     <option :value="SleepingType.NO_SLEEPING">No sleeping</option>
                     <option :value="SleepingType.BODY_SLEEPING">Body sleeping</option>
                     <option :value="SleepingType.ISLAND_SLEEPING" disabled>Island sleeping</option>
                 </select>
-                <label class="option-name" for="sleeping-select">Sleeping</label>
             </div>
             <div class="option">
                 <a class="option-name">GravityX</a>
-                <div class="coord-container">
-                    <input class="coord" type="number" :value="gravity.x" disabled>
-                    <input class="coord-range" type="range" v-model="gravity.x" min="-20" max="20" step="1">
+                <div class="range-container">
+                    <div class="range-value"> {{ gravity.x }} </div>
+                    <input class="range-range" type="range" v-model="gravity.x" min="-20" max="20" step="1">
                 </div>
             </div>
             <div class="option">
                 <a class="option-name">GravityY</a>
-                <div class="coord-container">
-                    <input class="coord" type="number" :value="gravity.y" disabled>
-                    <input class="coord-range" type="range" v-model="gravity.y" min="-20" max="20" step="1">
+                <div class="range-container">
+                    <div class="range-value"> {{ gravity.y }} </div>
+                    <input class="range-range" type="range" v-model="gravity.y" min="-20" max="20" step="1">
                 </div>
             </div>
+            <div class="folder-name">Solver</div>
+            <template v-for="(value, option) in solverOptions">
+                <div class="option" :key="option">
+                    <a class="option-name">{{ option }}</a>
+                    <div class="range-container">
+                        <div class="range-value"> {{ value }} </div>
+                        <input class="range-range" type="range" :id="option" v-model="solverOptions[option]" :min="option === 'constraintIterations' ? 2 : 1" max="30" step="1">
+                    </div>
+                </div>
+            </template>
             <div class="folder-name">Render</div>
             <template v-for="(value, option) in renderOptions">
                 <div class="option" :key="option">
@@ -74,7 +103,7 @@
 </template>
 
 <script>
-import { SleepingType, Vector} from 'quark2d';
+import { SleepingType, Vector, RunnerType} from 'quark2d';
 
 export default {
     props: {
@@ -121,6 +150,18 @@ export default {
                 showPositions: false,
                 showStatus: false,
             },
+            solverOptions: {
+                positionIterations: 0,
+                velocityIterations: 0,
+                constraintIterations: 0,
+            },
+            runnerOptions: {
+                type: 0,
+                tps: 60,
+                timescale: 1,
+                correction: false,
+            },
+            RunnerType,
             sleeping: SleepingType.NO_SLEEPING,
             SleepingType,
             gravity: new Vector(),
@@ -147,6 +188,8 @@ export default {
             for (const option of Object.entries(renderOptions)) {
                 this.renderOptions[option[0]] = option[1];
             }
+            this.runnerOptions = demo.runner.options;
+            this.solverOptions = demo.engine.solver.options;
             this.sleeping = demo.engine.sleeping.type;
             this.codeUrl = constr.getUrl();
             this.gravity = demo.engine.gravity;
@@ -306,7 +349,7 @@ export default {
     padding-left: 4px;
 }
 
-.sleeping-select {
+.select {
     position: absolute;
     right: 5px;
     background-color: rgba(0, 0, 0, 0);
@@ -315,7 +358,7 @@ export default {
     border: none;
 }
 
-.sleeping-select option {
+.select option {
     background-color: rgb(48, 48, 48);
 }
 
@@ -326,7 +369,7 @@ export default {
     border: none;
 }
 
-.coord-container {
+.range-container {
     position: absolute;
     right: 4px;
     display: flex;
@@ -336,14 +379,14 @@ export default {
     height: 20px;
 }
 
-.coord-range {
-    width: calc(95% - 20px);
+.range-range {
+    width: calc(95% - 30px);
     height: 80%;
 }
 
-.coord {
+.range-value {
     text-overflow: clip;
-    width: 20px;
+    width: 30px;
     height: 80%;
     border: none;
     background-color: rgba(0, 0, 0, 0);
@@ -357,7 +400,7 @@ export default {
 }
 .info {
     color: rgb(160, 160, 160);
-    font-size: larger;
+    font-size: large;
 }
 
 #canvas-container {
