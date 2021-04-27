@@ -72,7 +72,7 @@ export default class extends Demo {
             }
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
         });
         runner.runRender();
 

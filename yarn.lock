@@ -7085,18 +7085,18 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-quark2d-pixi@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/quark2d-pixi/-/quark2d-pixi-0.0.10.tgz#2950e85dc106f77039ffeffc16ccbfd6ad2ad134"
-  integrity sha512-olryY8UA4twhzTknTZ3nXzRQUIdjVw7O9K2o5ufZ3cDf7YYX69FRQNu5S//R0yCXPhs7g5Csn7wueoYc25iWsw==
+quark2d-pixi@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/quark2d-pixi/-/quark2d-pixi-0.0.13.tgz#7a6000221b7f53e30190322fe6cecaa7318860a9"
+  integrity sha512-lrVx4criIMpj7Hl1d6a5CDbscj+mLCH1sROPisk3nlsid/PwtOLx2qaq9rae7VPgO5w4VFiu9CZKk9LYEROvAQ==
   dependencies:
     pixi.js "^6.0.2"
-    quark2d "^2.2.0"
+    quark2d "^2.3.1"
 
-quark2d@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/quark2d/-/quark2d-2.2.0.tgz#739198e635e27245394a83ef610d613b41d7b7c1"
-  integrity sha512-jGaszuGs4Pc3kMBybnWKYeG0ibWpiAxs6lAy2JyCBQ8CQdcpvjeyDWxRwMIOUiOVId8MJW8ldSTdWRgv+priZA==
+quark2d@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/quark2d/-/quark2d-2.3.1.tgz#df5bc7bba8a2bbe9fe6f32a5d4afe71f1b619542"
+  integrity sha512-c36g2+g7Kw+M+McxJr7wJrE1VZ6/bV5N2mUwD4gJM1cLjLC4ZPC50H+6ImpNbATWQeeVGUiT6lmoN5pWHVxs2g==
   dependencies:
     poly-decomp "^0.3.0"
 

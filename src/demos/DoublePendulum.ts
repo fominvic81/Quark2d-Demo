@@ -37,12 +37,14 @@ export default class extends Demo {
             scale: 40,
         });
 
+        engine.solver.options.constraintIterations = 5;
+
         const filter = {group: Filter.nextGroup(true)};
 
         const bodyA = Factory.Body.capsule(new Vector(0, -5), Math.PI * 0.5, 10, 0.5, {}, {filter});
         const bodyB = Factory.Body.capsule(new Vector(0, 5), Math.PI * 0.5, 10, 0.5, {}, {filter});
 
-        engine.world.add([bodyA, bodyB]);
+        engine.world.add(bodyA, bodyB);
 
         engine.world.add(new PointConstraint({
             bodyA,
@@ -59,7 +61,8 @@ export default class extends Demo {
             stiffness: 0.5,
         }));
 
-        bodyA.velocity.set(0.8, 0);
+        bodyA.velocity.set(0.6, 0);
+        bodyA.angularVelocity = -0.1;
 
         new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
             stiffness: 0.001,
@@ -72,7 +75,7 @@ export default class extends Demo {
             engine.update(timestamp);
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
         });
         runner.runRender();
         

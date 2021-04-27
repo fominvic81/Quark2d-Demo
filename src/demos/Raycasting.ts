@@ -73,7 +73,7 @@ export default class extends Demo {
         });
 
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
 
             render.userGraphics.clear()
             render.userGraphics.lineStyle(0.08, utils.rgb2hex([1, 0, 0]));

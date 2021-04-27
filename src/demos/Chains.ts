@@ -47,11 +47,11 @@ export default class extends Demo {
 
         const circleA = Factory.Body.circle(new Vector(-20, 0), 1);
         engine.world.add(circleA);
-        circleA.velocity.set(1, 0);
+        circleA.velocity.set(1, -0.2);
 
         const circleB = Factory.Body.circle(new Vector(20, 0), 1);
         engine.world.add(circleB);
-        circleB.velocity.set(-1, 0);
+        circleB.velocity.set(-1, -0.2);
 
         const filterA = {group: Filter.nextGroup(true)};
 
@@ -142,7 +142,7 @@ export default class extends Demo {
             engine.update(timestamp);
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
         });
         runner.runRender();
 

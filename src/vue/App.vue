@@ -119,6 +119,7 @@ export default {
                 showSensors: false,
                 showAABBs: false,
                 showPositions: false,
+                showStatus: false,
             },
             sleeping: SleepingType.NO_SLEEPING,
             SleepingType,
@@ -132,9 +133,7 @@ export default {
             this.onTogglePlay(this.paused);
         },
         singleStep () {
-            if (!this.paused) {
-                this.togglePlay();
-            }
+            this.paused = true;
             this.onSingleStep();
         },
         setRenderOption (event) {
@@ -159,7 +158,7 @@ export default {
     },
     created () {
         window.addEventListener('keydown', (event) => {
-            document.getElementById("focus").focus();
+            document.getElementById('focus').focus();
             if (event.key === 'p') {
                 this.togglePlay();
             } else if (event.key === 'o') {
@@ -353,7 +352,7 @@ export default {
 
 .info-field {
     position: absolute;
-    top: 45px;
+    bottom: 3px;
     left: 3px;
 }
 .info {

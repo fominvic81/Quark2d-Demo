@@ -93,11 +93,11 @@ export default class extends Demo {
         const deltaX = Math.cos(angle) * length;
         const deltaY = Math.sin(angle) * length;
 
-        engine.world.addBody([
+        engine.world.addBody(
             Factory.Body.rectangle(new Vector(startX + deltaX, startY + deltaY), angle, length, 1, {type: BodyType.static}, {filter: redGround}),
             Factory.Body.rectangle(new Vector(startX + deltaX * 3, startY + deltaY * 3), angle, length, 1, {type: BodyType.static}, {filter: greenGround}),
             Factory.Body.rectangle(new Vector(startX + deltaX * 5, startY + deltaY * 5), angle, length, 1, {type: BodyType.static}, {filter: blueGround}),
-        ]);
+        );
 
         for (let i = 0; i < 4; ++i) {
             engine.world.addBody(Factory.Body.rectangle(new Vector(startX + deltaX * i * 2, startY + deltaY * i * 2), angle, length, 1, {type: BodyType.static}, {filter: def}));
@@ -150,7 +150,7 @@ export default class extends Demo {
             }
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
         });
         runner.runRender();
 

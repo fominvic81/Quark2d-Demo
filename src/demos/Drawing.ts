@@ -71,8 +71,6 @@ export default class extends Demo {
 
                     if (drawPolygon) {
                         const polygonBody = Factory.Body.fromVertices(new Vector(0, 0), polygon);
-                        for (const shape of polygonBody.shapes) shape.updateInertia();
-                        polygonBody.updateInertia();
                         if (polygonBody.mass && polygonBody.inertia) engine.world.add(polygonBody);
                         else console.warn('avoid self-intersections');
                         polygon = [];
@@ -125,7 +123,7 @@ export default class extends Demo {
             engine.update(timestamp);
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
 
             render.userGraphics.clear();
 

@@ -43,7 +43,7 @@ export default class extends Demo {
         for (let i = 12; i >= 0; --i) {
             for (let j = 0; j <= i; ++j) {
                 const body = new Body();
-                body.setPosition(new Vector(j * 1.1 - i * 0.55, i * 1.1 - 3));
+                body.setPosition(new Vector(j * 1.05 - i * 0.525, i * 1.05 - 2));
 
                 const shape = Factory.Shape.rectangle(0.9, 0.9, {restitution: 0, friction: Infinity, radius: 0.05});
                 body.addShape(shape);
@@ -62,7 +62,7 @@ export default class extends Demo {
             engine.update(timestamp);
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
         });
         runner.runRender();
 

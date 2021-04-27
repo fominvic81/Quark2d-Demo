@@ -55,7 +55,7 @@ export default class extends Demo {
         });
 
         // Add walls
-        engine.world.add([
+        engine.world.add(
             Factory.Body.rectangle(new Vector(0, 20), 0, 60, 1, {type: BodyType.static}),
             Factory.Body.rectangle(new Vector(0, -20), 0, 60, 1, {type: BodyType.static}),
             Factory.Body.rectangle(new Vector(30, 0), 0, 1, 40, {type: BodyType.static}),
@@ -65,17 +65,17 @@ export default class extends Demo {
             Factory.Body.rectangle(new Vector(22.5, -5), 0, 15, 1, {type: BodyType.static}),
 
             Factory.Body.rectangle(new Vector(-15.5, 10), 0, 1, 20, {type: BodyType.static}),
-        ]);
+        );
 
         const platform = Factory.Body.rectangle(new Vector(12.5, -5) ,0, 5, 1, {type: BodyType.kinematic}, {friction: 5});
         engine.world.add(platform);
 
         // Add boxes on platform
-        engine.world.add([
+        engine.world.add(
             Factory.Body.rectangle(new Vector(12.5, -7), 0, 0.9, 0.9, {}, {friction: 5}),
             Factory.Body.rectangle(new Vector(13, -6), 0, 0.9, 0.9, {}, {friction: 5}),
             Factory.Body.rectangle(new Vector(12, -6), 0, 0.9, 0.9, {}, {friction: 5}),
-        ]);
+        );
 
         let dir = 1;
 
@@ -190,7 +190,7 @@ export default class extends Demo {
             
         });
         runner.events.on('render', timestamp => {
-            render.update();
+            render.update(timestamp.delta);
         });
         runner.runRender();
 
