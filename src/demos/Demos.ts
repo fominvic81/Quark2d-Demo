@@ -1,4 +1,3 @@
-import { Demo } from '../demo/Demo';
 import Pool from './Pool';
 import Bridge from './Bridge';
 import ConveyorBelt from './ConveyorBelt';
@@ -16,7 +15,6 @@ import Raycasting from './Raycasting';
 import Filtering from './Filtering';
 import Kinematic from './Kinematic';
 import Sensor from './Sensor';
-
 
 export const Demos = [
     Pool,
@@ -37,13 +35,3 @@ export const Demos = [
     Kinematic,
     Sensor,
 ];
-
-export const DemoByName: Map<string, new (element: HTMLElement) => Demo> = new Map();
-
-for (const demo of Demos) {
-    DemoByName.set(demo.options.name, demo);
-}
-
-Demos.sort((a, b) => {
-    return a.options.name < b.options.name ? -1 : 1;
-});

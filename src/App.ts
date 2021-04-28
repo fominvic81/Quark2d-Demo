@@ -19,7 +19,7 @@ export class App {
     paused: boolean = false;
     changeDemo: {(demo: Demo, constr: DemoConstructor): void} = () => {};
     addDemoToVue: {(demo: DemoConstructor): void} = () => {};
-    demos: (DemoConstructor)[] = [];
+    demos: Set<DemoConstructor> = new Set();
     demoByName: Map<string, DemoConstructor> = new Map();
 
     constructor (demos: DemoConstructor[], defaultDemo: DemoConstructor) {
@@ -79,39 +79,41 @@ export class App {
         this.updatePaused();
     }
 
-    setDemo (demo: string) {
-        if (this.demo) {
-            this.demo.render.renderer.destroy();
-            this.demo.render.stage.destroy();
-            this.demo.render.mouse.removeListeners();
-            this.demo.render.canvas.remove();
+    setDemo (demoName: string) {
+        const demo = this.demoByName.get(demoName);
+        if (demo) {
+            if (this.demo) {
+                this.demo.render.renderer.destroy();
+                this.demo.render.stage.destroy();
+                this.demo.render.mouse.removeListeners();
+                this.demo.render.canvas.remove();
+                this.demo.runner.stop();
+                this.demo.runner.stopRender();
 
-            for (const g in this.demo.render) {
-                // @ts-ignore
-                delete this.demo.render[g];
+                for (const g in this.demo.render) {
+                    // @ts-ignore
+                    delete this.demo.render[g];
+                }
+                for (const g in this.demo.runner) {
+                    // @ts-ignore
+                    delete this.demo.runner[g];
+                }
+                for (const g in this.demo.engine) {
+                    // @ts-ignore
+                    delete this.demo.engine[g];
+                }
             }
-            this.demo.runner.stop();
-            this.demo.runner.stopRender();
-
-            for (const g in this.demo.runner) {
-                // @ts-ignore
-                delete this.demo.runner[g];
-            }
-            for (const g in this.demo.engine) {
-                // @ts-ignore
-                delete this.demo.engine[g];
-            }
+            // @ts-ignore
+            this.demoName = demo.options.name;
+            this.demo = new demo(<HTMLElement>document.getElementById('canvas-container'));
+            this.changeDemo(this.demo, demo);
+            this.updatePaused();
         }
-        // @ts-ignore
-        this.demoName = this.demoByName.get(demo).options.name;
-        this.demo = new (<DemoConstructor>this.demoByName.get(demo))(<HTMLElement>document.getElementById('canvas-container'));
-        this.changeDemo(this.demo, <DemoConstructor>this.demoByName.get(demo));
-        this.updatePaused();
     }
 
-    addDemo (...demos: (DemoConstructor)[]) {
+    addDemo (...demos: DemoConstructor[]) {
         for (const demo of demos) {
-            this.demos.push(demo);
+            this.demos.add(demo);
             // @ts-ignore
             this.demoByName.set(demo.options.name, demo);
             this.addDemoToVue(demo);
