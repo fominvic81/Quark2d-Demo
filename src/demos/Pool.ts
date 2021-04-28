@@ -18,6 +18,7 @@ export default class extends Demo {
         name: 'Pool',
         fileName: 'Pool',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

@@ -18,6 +18,7 @@ export default class extends Demo {
         name: 'Friction',
         fileName: 'Friction',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

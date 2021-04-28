@@ -24,6 +24,7 @@ export default class extends Demo {
         name: 'Kinematic bodies',
         fileName: 'Kinematic',
         info: 'Press left/right arrow to move wrecking ball',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;
@@ -53,6 +54,8 @@ export default class extends Demo {
                 utils.rgb2hex([0.8, 0.8, 0.8]),
             }
         });
+
+        engine.solver.options.velocityIterations = 10;
 
         // Add walls
         engine.world.add(

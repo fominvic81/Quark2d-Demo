@@ -19,6 +19,7 @@ export default class extends Demo {
         name: 'Double pendulum',
         fileName: 'DoublePendulum',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

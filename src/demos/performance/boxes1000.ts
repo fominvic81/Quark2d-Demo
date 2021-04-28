@@ -10,15 +10,14 @@ import {
     Vector,
 } from 'quark2d';
 import { Render } from 'quark2d-pixi';
-import { Demo } from '../demo/Demo';
-
+import { Demo } from '../../demo/Demo';
 
 export default class extends Demo {
     static options = {
-        name: 'Stacking',
-        fileName: 'Stacking',
+        name: '1000 boxes',
+        fileName: 'performance/boxes1000',
+        sort: 2,
         info: '',
-        sort: 0,
     }
     engine: Engine;
     runner: Runner;
@@ -27,6 +26,12 @@ export default class extends Demo {
     constructor (element: HTMLElement) {
         super(element);
 
+        let seed = 16484;
+        const rand = () => {
+            seed = (8677 * seed + 89041) % 19763;
+            return seed / 19762;
+        }
+
         const engine = new Engine();
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
@@ -34,17 +39,19 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
-            scale: 40,
+            scale: 30,
+            showStatus: true,
         });
 
-        engine.world.add(Factory.Body.rectangle(new Vector(0, 12), 0, 30, 1, {type: BodyType.static}));
+        engine.world.add(
+            Factory.Body.rectangle(new Vector(0, 20), 0, 40, 1, {type: BodyType.static}),
+            Factory.Body.rectangle(new Vector(0, -20), 0, 40, 1, {type: BodyType.static}),
+            Factory.Body.rectangle(new Vector(20, 0), 0, 1, 40, {type: BodyType.static}),
+            Factory.Body.rectangle(new Vector(-20, 0), 0, 1, 40, {type: BodyType.static}),
+        );
 
-        for (let i = 0; i < 10; ++i) {
-            engine.world.add(Factory.Body.rectangle(new Vector(-5, 10 - i * 1.2), 0, 1, 1, {}, {restitution: 0.5, radius: 0.1}));
-        }
-
-        for (let i = 0; i < 12; ++i) {
-            engine.world.add(Factory.Body.circle(new Vector(5, 10 - i), 0.5));
+        for (let i = 0; i < 1000; ++i) {
+            engine.world.add(Factory.Body.rectangle(new Vector(rand() * 30 - 15, rand() * 30 - 15), 0, 0.8, 0.8, {}, {radius: 0.1}));
         }
 
         new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({

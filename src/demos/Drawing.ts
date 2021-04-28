@@ -25,6 +25,7 @@ export default class extends Demo {
             'Press \'f\' to draw polygon(avoid self-intersections)',
             'Press \'g\' to draw circle',
         ],
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

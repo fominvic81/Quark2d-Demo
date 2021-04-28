@@ -24,6 +24,7 @@ export default class extends Demo {
         name: 'Bridge',
         fileName: 'Bridge',
         info: ['Left mouse button to move bodies', 'Right mouse button to move camera', 'Wheel to zoom'],
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

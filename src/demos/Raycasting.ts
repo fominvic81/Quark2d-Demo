@@ -19,6 +19,7 @@ export default class extends Demo {
         name: 'Raycasting',
         fileName: 'Raycasting',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

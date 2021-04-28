@@ -20,6 +20,7 @@ export default class extends Demo {
         name: 'Sensor',
         fileName: 'Sensor',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

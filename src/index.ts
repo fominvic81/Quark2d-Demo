@@ -9,7 +9,7 @@ for (const demo of Demos) {
 }
 
 Demos.sort((a, b) => {
-    return a.options.name < b.options.name ? -1 : 1;
+    return (a.options.sort - b.options.sort) || (a.options.name < b.options.name ? -1 : 1);
 });
 
 const app = new App(Demos, <DemoConstructor>DemoByName.get('Bridge'));

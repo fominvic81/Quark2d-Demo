@@ -20,6 +20,7 @@ export default class extends Demo {
         name: 'Conveyor belt',
         fileName: 'ConveyorBelt',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

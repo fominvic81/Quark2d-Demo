@@ -15,8 +15,8 @@ import { Demo } from '../demo/Demo';
 
 export default class extends Demo {
     static options = {
-        name: 'Stacking',
-        fileName: 'Stacking',
+        name: 'Fixed rotation',
+        fileName: 'FixedRotation',
         info: '',
         sort: 0,
     }
@@ -34,17 +34,15 @@ export default class extends Demo {
             element: element,
             width: element.clientWidth,
             height: element.clientHeight,
-            scale: 40,
+            scale: 50,
         });
 
         engine.world.add(Factory.Body.rectangle(new Vector(0, 12), 0, 30, 1, {type: BodyType.static}));
 
         for (let i = 0; i < 10; ++i) {
-            engine.world.add(Factory.Body.rectangle(new Vector(-5, 10 - i * 1.2), 0, 1, 1, {}, {restitution: 0.5, radius: 0.1}));
-        }
-
-        for (let i = 0; i < 12; ++i) {
-            engine.world.add(Factory.Body.circle(new Vector(5, 10 - i), 0.5));
+            const body = Factory.Body.rectangle(new Vector((i % 2 - 0.5) * 0.5, i), 0, 1, 1);
+            body.setFixedRotation(true);
+            engine.world.add(body);
         }
 
         new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({

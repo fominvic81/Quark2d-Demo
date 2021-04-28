@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "quark2d": "^2.3.1",
-    "quark2d-pixi": "^0.0.13",
+    "quark2d-pixi": "^0.0.14",
     "vue": "~2.6"
   }
 }

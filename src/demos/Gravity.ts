@@ -19,6 +19,7 @@ export default class extends Demo {
         name: 'Gravity',
         fileName: 'Gravity',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

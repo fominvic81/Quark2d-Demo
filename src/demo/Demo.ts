@@ -6,6 +6,7 @@ export abstract class Demo {
         name: string;
         fileName: string;
         info: string | string[];
+        sort: number,
     };
     abstract engine: Engine;
     abstract runner: Runner;

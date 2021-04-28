@@ -21,6 +21,7 @@ export default class extends Demo {
         name: 'Chains',
         fileName: 'Chains',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

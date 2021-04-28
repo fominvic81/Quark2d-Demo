@@ -21,6 +21,7 @@ export default class extends Demo {
         name: 'Collision filtering',
         fileName: 'Filtering',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

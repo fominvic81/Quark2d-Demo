@@ -19,6 +19,7 @@ export default class extends Demo {
         name: 'Tumbler',
         fileName: 'Tumbler',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;

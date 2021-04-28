@@ -23,6 +23,7 @@ export default class extends Demo {
         name: 'Wrecking ball',
         fileName: 'WreckingBall',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;
