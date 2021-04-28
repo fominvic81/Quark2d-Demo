@@ -400,7 +400,7 @@ export default {
 }
 .info {
     color: rgb(160, 160, 160);
-    font-size: large;
+    font-size: x-large;
 }
 
 #canvas-container {
