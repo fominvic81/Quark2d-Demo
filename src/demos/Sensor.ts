@@ -63,7 +63,7 @@ export default class extends Demo {
 
                 const impulse = delta.divide(dist).scale(diff * 0.005);
 
-                (<Body>anotherShape.body).velocity.add(impulse);
+                anotherShape.body!.velocity.add(impulse);
             }
         });
 

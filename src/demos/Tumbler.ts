@@ -41,10 +41,10 @@ export default class extends Demo {
         const tumbler = new Body({type: BodyType.kinematic});
         tumbler.angularVelocity = 0.01;
 
-        tumbler.addShape(Factory.Shape.rectangle(30, 1), false, new Vector(0, 15));
-        tumbler.addShape(Factory.Shape.rectangle(30, 1), false, new Vector(0, -15));
-        tumbler.addShape(Factory.Shape.rectangle(1, 30), false, new Vector(15, 0));
-        tumbler.addShape(Factory.Shape.rectangle(1, 30), true, new Vector(-15, 0));
+        tumbler.addShape(Factory.Shape.rectangle(30, 1), new Vector(0, 15));
+        tumbler.addShape(Factory.Shape.rectangle(30, 1), new Vector(0, -15));
+        tumbler.addShape(Factory.Shape.rectangle(1, 30), new Vector(15, 0));
+        tumbler.addShape(Factory.Shape.rectangle(1, 30), new Vector(-15, 0));
 
         engine.world.add(tumbler);
 

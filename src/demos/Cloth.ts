@@ -72,12 +72,14 @@ export default class extends Demo {
                     engine.world.add(new DistanceConstraint({
                         bodyA: body,
                         bodyB: cur[j - 1],
+                        stiffness: 0.25,
                     }));
                 }
                 if (i > 0) {
                     engine.world.add(new DistanceConstraint({
                         bodyA: body,
                         bodyB: prev[j],
+                        stiffness: 0.25,
                     }));
                 }
 

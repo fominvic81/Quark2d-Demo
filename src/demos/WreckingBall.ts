@@ -46,6 +46,8 @@ export default class extends Demo {
             scale: 30,
         });
 
+        engine.solver.options.constraintIterations = 6;
+
         engine.world.add(Factory.Body.rectangle(new Vector(0, 12), 0, 100, 1, {type: BodyType.static}));
 
         for (let i = 0; i < 10; ++i) {
@@ -56,7 +58,7 @@ export default class extends Demo {
 
         const filter = {group: Filter.nextGroup(true)};
 
-        let bodyA = Factory.Body.capsule(new Vector(-8, -16), 0, 1, 0.25, {}, {filter});
+        let bodyA = Factory.Body.capsule(new Vector(-8, -16), 0, 1, 0.25, {}, {filter, density: 800});
         engine.world.add(bodyA);
 
         engine.world.add(new PointConstraint({
@@ -67,7 +69,7 @@ export default class extends Demo {
         }));
 
         for (let i = 1; i <= 20; ++i) {
-            const bodyB = Factory.Body.capsule(new Vector(-i - 8, -16), 0, 1, 0.25, {}, {filter});
+            const bodyB = Factory.Body.capsule(new Vector(-i - 8, -16), 0, 1, 0.25, {}, {filter, density: 800});
             engine.world.add(bodyB);
 
             engine.world.add(new PointConstraint({
@@ -81,8 +83,7 @@ export default class extends Demo {
             bodyA = bodyB;
         }
 
-        const ball = Factory.Body.circle(new Vector(-28.5, -16), 1.5, {}, {filter});
-        ball.setDensity(800);
+        const ball = Factory.Body.circle(new Vector(-28.5, -16), 1.5, {}, {filter, density: 800});
         engine.world.add(ball);
 
         engine.world.add(new PointConstraint({

@@ -11,7 +11,6 @@ import {
     MouseConstraint,
     PointConstraint,
     Runner,
-    Shape,
     SleepingType,
     Vector,
 } from 'quark2d';
@@ -102,7 +101,7 @@ const softCircle = (position: Vector, radius: number, stiffness: number, count: 
             end: pos,
             radius: 0.2,
             filter,
-        }), true);
+        }));
         composite.add(body);
 
         Vector.subtract(shape.start, shape.position, offset);
@@ -177,12 +176,12 @@ export default class extends Demo {
         circle.velocity.set(1.5, 0);
         engine.world.add(circle)
 
-        engine.world.merge(softCircle(new Vector(0, -15), 5, 0.02, 30));
-        engine.world.merge(softRect(new Vector(2, 0), 5, 15, 0.05, 0.5));
+        engine.world.merge(softCircle(new Vector(0, -15), 5, 0.08, 30));
+        engine.world.merge(softRect(new Vector(2, 0), 5, 15, 0.08, 0.5));
 
 
         new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.003,
+            stiffness: 0.005,
             damping: 0.02,
         })]);
 

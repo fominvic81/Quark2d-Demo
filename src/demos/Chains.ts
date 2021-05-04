@@ -46,13 +46,13 @@ export default class extends Demo {
 
         engine.world.add(Factory.Body.rectangle(new Vector(0, 15), 0, 30, 1, {type: BodyType.static}));
 
-        const circleA = Factory.Body.circle(new Vector(-20, 0), 1);
+        const circleA = Factory.Body.circle(new Vector(-20, 0), 1, {}, {density: 200});
         engine.world.add(circleA);
-        circleA.velocity.set(1, -0.2);
+        circleA.velocity.set(0.8, -0.1);
 
-        const circleB = Factory.Body.circle(new Vector(20, 0), 1);
+        const circleB = Factory.Body.circle(new Vector(20, 0), 1, {}, {density: 200});
         engine.world.add(circleB);
-        circleB.velocity.set(-1, -0.2);
+        circleB.velocity.set(-0.8, -0.1);
 
         const filterA = {group: Filter.nextGroup(true)};
 

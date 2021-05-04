@@ -51,8 +51,6 @@ export default class extends Demo {
         let drawCircle = false;
 
         const lastPosition = new Vector();
-        const TerrainBody = new Body({type: BodyType.static});
-        engine.world.add(TerrainBody);
 
         let polygon: Vector[] = [];
 
@@ -99,7 +97,10 @@ export default class extends Demo {
         render.mouse.events.on('mouse-move', () => {
             if (drawTerrain && Vector.distSquared(render.mouse.position, lastPosition) > 0.1) {
 
-                TerrainBody.addShape(new Edge({start: lastPosition, end: render.mouse.position, radius: 0.2}));
+                const body = new Body({type: BodyType.static});
+                body.addShape(new Edge({start: lastPosition, end: render.mouse.position, radius: 0.2}));
+                engine.world.add(body);
+
                 render.mouse.position.clone(lastPosition);
 
             } else if (drawPolygon && Vector.distSquared(render.mouse.position, polygon[polygon.length - 1]) > 0.1) {

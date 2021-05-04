@@ -46,7 +46,7 @@ export default class extends Demo {
                 const body = new Body();
                 body.setPosition(new Vector(j * 1.05 - i * 0.525, i * 1.05 - 2));
 
-                const shape = Factory.Shape.rectangle(0.9, 0.9, {restitution: 0, friction: Infinity, radius: 0.05});
+                const shape = Factory.Shape.rectangle(0.9, 0.9, {restitution: 0, friction: 10, radius: 0.05});
                 body.addShape(shape);
                 engine.world.add(body);
             }

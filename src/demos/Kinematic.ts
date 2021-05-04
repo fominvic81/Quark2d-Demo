@@ -44,18 +44,19 @@ export default class extends Demo {
 
             colors: {
                 shape: (shape: Shape) =>
-                (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) :
-                (<Body>shape.body).type === BodyType.kinematic ? utils.rgb2hex([0.4, 0.4, 0.8]) :
+                shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) :
+                shape.body!.type === BodyType.kinematic ? utils.rgb2hex([0.4, 0.4, 0.8]) :
                 shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) :
                 Render.randomColor(),
                 shapeOutline: (shape: Shape) =>
-                (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) :
+                shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) :
                 shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) :
                 utils.rgb2hex([0.8, 0.8, 0.8]),
             }
         });
 
         engine.solver.options.velocityIterations = 10;
+        engine.solver.options.constraintIterations = 6;
 
         // Add walls
         engine.world.add(
@@ -123,7 +124,7 @@ export default class extends Demo {
         });
 
         // Add wrecking ball
-        let bodyA = Factory.Body.capsule(new Vector(-10, 0.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}});
+        let bodyA = Factory.Body.capsule(new Vector(-10, 0.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}, density: 1000});
         engine.world.add(bodyA);
 
         engine.world.add(new PointConstraint({
@@ -134,7 +135,7 @@ export default class extends Demo {
         }));
 
         for (let i = 0; i < 15; ++i) {
-            const bodyB = Factory.Body.capsule(new Vector(-10, i + 1.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}});
+            const bodyB = Factory.Body.capsule(new Vector(-10, i + 1.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}, density: 1000});
             engine.world.add(bodyB);
 
             engine.world.add(new PointConstraint({
@@ -148,8 +149,7 @@ export default class extends Demo {
             bodyA = bodyB;
         }
 
-        const ball = Factory.Body.circle(new Vector(-10, 16), 1.5, {}, {filter: {group: group}});
-        ball.setDensity(800);
+        const ball = Factory.Body.circle(new Vector(-10, 16), 1.5, {}, {filter: {group: group}, density: 500});
         engine.world.add(ball);
 
         engine.world.add(new PointConstraint({

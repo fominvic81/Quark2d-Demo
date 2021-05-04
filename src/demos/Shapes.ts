@@ -65,9 +65,9 @@ export default class extends Demo {
         engine.world.add(arrow);
 
         const container = new Body({position: new Vector(9, 0)});
-        container.addShape(Factory.Shape.rectangle(0.2, 1.5), false, new Vector(1.4, 0));
-        container.addShape(Factory.Shape.rectangle(0.2, 1.5), false, new Vector(-1.4, 0));
-        container.addShape(Factory.Shape.rectangle(3, 0.2), false, new Vector(0, 0.75));
+        container.addShape(Factory.Shape.rectangle(0.2, 1.5), new Vector(1.4, 0));
+        container.addShape(Factory.Shape.rectangle(0.2, 1.5), new Vector(-1.4, 0));
+        container.addShape(Factory.Shape.rectangle(3, 0.2), new Vector(0, 0.75));
         engine.world.add(container);
 
         for (let i = 0; i < 4; ++i) {

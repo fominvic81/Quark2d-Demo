@@ -45,9 +45,6 @@ export class App {
                     this.demo.runner.singleStep();
                 },
                 onSetRenderOption: (option: string, value: boolean) => {
-                    if (option === 'showStatus') {
-                        this.demo.render.statusText.text = '';
-                    }
                     // @ts-ignore
                     if (this.demo.render['set' + option[0].toUpperCase() + option.substring(1, option.length)]) {
                         // @ts-ignore

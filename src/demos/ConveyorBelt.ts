@@ -38,8 +38,8 @@ export default class extends Demo {
             height: element.clientHeight,
             scale: 40,
             colors: {
-                shape: (shape: Shape) => (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
-                shapeOutline: (shape: Shape) => (<Body>shape.body).type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
+                shape: (shape: Shape) => shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
+                shapeOutline: (shape: Shape) => shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
             }
         });
 
