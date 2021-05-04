@@ -1,25 +1,24 @@
 import {
+    BodyType,
     DistanceConstraint,
     Engine,
     Factory,
-    Filter,
     Mouse,
     MouseConstraint,
-    PointConstraint,
     Runner,
     SleepingType,
     Vector,
 } from 'quark2d';
 import { Render } from 'quark2d-pixi';
-import { Demo } from '../demo/Demo';
+import { Demo } from '../../demo/Demo';
 
 
 export default class extends Demo {
     static options = {
-        name: 'Double pendulum',
-        fileName: 'DoublePendulum',
+        name: '200 capsules',
+        fileName: 'performance/capsules200',
+        sort: 4,
         info: '',
-        sort: 0,
     }
     engine: Engine;
     runner: Runner;
@@ -27,6 +26,12 @@ export default class extends Demo {
 
     constructor (element: HTMLElement) {
         super(element);
+
+        let seed = 16484;
+        const rand = () => {
+            seed = (8677 * seed + 89041) % 19763;
+            return seed / 19762;
+        }
 
         const engine = new Engine();
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
@@ -37,34 +42,19 @@ export default class extends Demo {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
+            showStatus: true,
         });
 
-        engine.solver.options.constraintIterations = 5;
+        engine.world.add(
+            Factory.Body.rectangle(new Vector(0, 15), 0, 30, 1, {type: BodyType.static}),
+            Factory.Body.rectangle(new Vector(0, -15), 0, 30, 1, {type: BodyType.static}),
+            Factory.Body.rectangle(new Vector(15, 0), 0, 1, 30, {type: BodyType.static}),
+            Factory.Body.rectangle(new Vector(-15, 0), 0, 1, 30, {type: BodyType.static}),
+        );
 
-        const filter = {group: Filter.nextGroup(true)};
-
-        const bodyA = Factory.Body.capsule(new Vector(0, -5), Math.PI * 0.5, 10, 0.5, {}, {filter});
-        const bodyB = Factory.Body.capsule(new Vector(0, 5), Math.PI * 0.5, 10, 0.5, {}, {filter});
-
-        engine.world.add(bodyA, bodyB);
-
-        engine.world.add(new PointConstraint({
-            bodyA,
-            bodyB,
-            pointA: new Vector(5, 0),
-            pointB: new Vector(-5, 0),
-            stiffness: 0.5,
-        }));
-
-        engine.world.add(new PointConstraint({
-            bodyA,
-            pointA: new Vector(-5, 0),
-            pointB: new Vector(0, bodyA.position.y - 5),
-            stiffness: 0.5,
-        }));
-
-        bodyA.velocity.set(0.6, 0);
-        bodyA.angularVelocity = -0.1;
+        for (let i = 0; i < 200; ++i) {
+            engine.world.add(Factory.Body.capsule(new Vector(rand() * 25 - 12.5, rand() * 25 - 12.5), rand() * Math.PI, 0.8, 0.4, {}, {radius: 0.1}));
+        }
 
         new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
             stiffness: 0.001,
@@ -80,6 +70,7 @@ export default class extends Demo {
             render.update(timestamp.delta);
         });
         runner.runRender();
+
         
         this.engine = engine;
         this.runner = runner;

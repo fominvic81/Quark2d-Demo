@@ -36,6 +36,7 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         const color = utils.rgb2hex([0.6, 0.6, 0.6]);
+        // @ts-ignore
         const render = new Render(engine, {
             element: element,
             width: element.clientWidth,

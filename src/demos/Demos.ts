@@ -22,6 +22,9 @@ import boxes1000 from './performance/boxes1000';
 import circles200 from './performance/circles200';
 import circles500 from './performance/circles500';
 import circles1000 from './performance/circles1000';
+import capsules200 from './performance/capsules200';
+import capsules500 from './performance/capsules500';
+import capsules1000 from './performance/capsules1000';
 import Mixed from './performance/Mixed';
 import Cloth from './Cloth';
 import FixedRotation from './FixedRotation';
@@ -53,6 +56,9 @@ export const Demos = [
     circles200,
     circles500,
     circles1000,
+    capsules200,
+    capsules500,
+    capsules1000,
     Mixed,
     Cloth,
     FixedRotation,

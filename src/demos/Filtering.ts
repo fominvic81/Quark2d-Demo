@@ -71,6 +71,7 @@ export default class extends Demo {
             mask: defaultCategory | redCategory | greenCategory | blueCategory,
         };
 
+        // @ts-ignore
         const render = new Render(engine, {
             element: element,
             width: element.clientWidth,

@@ -33,6 +33,7 @@ export default class extends Demo {
         engine.gravity.set(0, 5);
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
+        // @ts-ignore
         const render = new Render(engine, {
             element: element,
             width: element.clientWidth,

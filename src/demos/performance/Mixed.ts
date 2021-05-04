@@ -17,7 +17,7 @@ export default class extends Demo {
     static options = {
         name: 'mixed',
         fileName: 'performance/Mixed',
-        sort: 4,
+        sort: 6,
         info: '',
     }
     engine: Engine;
@@ -36,6 +36,7 @@ export default class extends Demo {
         const engine = new Engine();
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
+        // @ts-ignore
         const render = new Render(engine, {
             element: element,
             width: element.clientWidth,
