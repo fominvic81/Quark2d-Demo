@@ -1,13 +1,13 @@
 import {
     Body,
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Filter,
+    GridBroadphase,
     Mouse,
-    MouseConstraint,
-    PointConstraint,
+    MouseJoint,
     Runner,
     Shape,
     ShapeType,
@@ -33,31 +33,23 @@ export default class extends Demo {
     constructor (element: HTMLElement) {
         super(element);
 
-        const engine = new Engine();
+        const engine = new Engine({broadphaseConstructor: GridBroadphase});
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 20,
 
             colors: {
-                shape: (shape: Shape) =>
-                shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) :
-                shape.body!.type === BodyType.kinematic ? utils.rgb2hex([0.4, 0.4, 0.8]) :
-                shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) :
-                Render.randomColor(),
-                shapeOutline: (shape: Shape) =>
-                shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) :
-                shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) :
-                utils.rgb2hex([0.8, 0.8, 0.8]),
+                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
+                shapeOutline: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
             }
         });
 
-        engine.solver.options.velocityIterations = 10;
-        engine.solver.options.constraintIterations = 6;
+        engine.solver.options.iterations = 10;
+        engine.solver.options.jointIterations = 6;
 
         // Add walls
         engine.world.add(
@@ -128,7 +120,7 @@ export default class extends Demo {
         let bodyA = Factory.Body.capsule(new Vector(-10, 0.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}, density: 1000});
         engine.world.add(bodyA);
 
-        engine.world.add(new PointConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             bodyB: crane,
             pointA: new Vector(-0.5, 0),
@@ -139,7 +131,7 @@ export default class extends Demo {
             const bodyB = Factory.Body.capsule(new Vector(-10, i + 1.5), Math.PI * 0.5, 1, 0.25, {}, {filter: {group}, density: 1000});
             engine.world.add(bodyB);
 
-            engine.world.add(new PointConstraint({
+            engine.world.add(new DistJoint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(0.5, 0),
@@ -153,7 +145,7 @@ export default class extends Demo {
         const ball = Factory.Body.circle(new Vector(-10, 16), 1.5, {}, {filter: {group: group}, density: 500});
         engine.world.add(ball);
 
-        engine.world.add(new PointConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             bodyB: ball,
             pointA: new Vector(0.5, 0),
@@ -167,16 +159,15 @@ export default class extends Demo {
             }
         }
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
         let timer = 0.5;
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
 
             timer += timestamp.delta;
@@ -193,7 +184,7 @@ export default class extends Demo {
             crane.velocity.set(craneDir * 0.15, 0);
             
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

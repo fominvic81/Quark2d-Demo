@@ -1,11 +1,11 @@
 import {
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Filter,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     Shape,
     SleepingType,
@@ -72,8 +72,7 @@ export default class extends Demo {
         };
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 20,
@@ -115,16 +114,15 @@ export default class extends Demo {
 
         engine.world.addBody(Factory.Body.rectangle(new Vector(startX + deltaX * 7.5, startY + deltaY * 7.5 + 5), 0, 1, 30, {type: BodyType.static}, {filter: def}))
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
         let timer = 0;
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
 
             timer += timestamp.delta;
@@ -151,7 +149,7 @@ export default class extends Demo {
                 }));
             }
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

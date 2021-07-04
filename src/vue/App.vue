@@ -81,15 +81,24 @@
                 </div>
             </div>
             <div class="folder-name">Solver</div>
-            <template v-for="(value, option) in solverOptions">
-                <div class="option" :key="option">
-                    <a class="option-name">{{ option }}</a>
-                    <div class="range-container">
-                        <div class="range-value"> {{ value }} </div>
-                        <input class="range-range" type="range" :id="option" v-model="solverOptions[option]" :min="option === 'constraintIterations' ? 2 : 1" max="30" step="1">
-                    </div>
+            <div class="option">
+                <a class="option-name">Iterations</a>
+                <div class="range-container">
+                    <div class="range-value"> {{ solverOptions.iterations }} </div>
+                    <input class="range-range" type="range" id="Iterations" v-model="solverOptions.iterations" min="1" max="30" step="1">
                 </div>
-            </template>
+            </div>
+            <div class="option">
+                <a class="option-name">JointIterations</a>
+                <div class="range-container">
+                    <div class="range-value"> {{ solverOptions.jointIterations }} </div>
+                    <input class="range-range" type="range" id="JointIterations" v-model="solverOptions.jointIterations" min="1" max="30" step="1">
+                </div>
+            </div>
+            <div class="option">
+                <input class="checkbox" type="checkbox" id="warmStarting" v-model="solverOptions.warmStarting">
+                <label class="option-name" for="warmStarting"> WarmStarting </label>
+            </div>
             <div class="folder-name">Render</div>
             <template v-for="(value, option) in renderOptions">
                 <div class="option" :key="option">
@@ -149,6 +158,7 @@ export default {
                 showAABBs: false,
                 showPositions: false,
                 showStatus: false,
+                showBroadphase: false,
             },
             solverOptions: {
                 positionIterations: 0,

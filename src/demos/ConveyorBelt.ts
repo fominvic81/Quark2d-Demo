@@ -4,7 +4,7 @@ import {
     Engine,
     Factory,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     Shape,
     SleepingType,
@@ -33,15 +33,10 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
-            colors: {
-                shape: (shape: Shape) => shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
-                shapeOutline: (shape: Shape) => shape.body!.type === BodyType.static ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
-            }
         });
 
         engine.world.addBody(Factory.Body.rectangle(new Vector(0, 5), 0, 50, 1, {type: BodyType.static}));
@@ -53,13 +48,13 @@ export default class extends Demo {
             engine.world.addBody(Factory.Body.rectangle(new Vector(i * 2 - 20, -8), 0, 1, 1));
         }
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse);
+        new MouseJoint(engine, <Mouse><unknown>render.mouse);
 
         const runner = new Runner();
 
         let timer = 0;
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
 
             timer += timestamp.delta;
@@ -70,7 +65,7 @@ export default class extends Demo {
                 engine.world.addBody(Factory.Body.polygon(new Vector(-20, -8), Math.ceil(Math.random() * 4) + 3, 0.6 - radius, {}, {radius}));
             }
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

@@ -1,11 +1,11 @@
 import {
     Body,
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     SleepingType,
     Vector,
@@ -32,8 +32,7 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
@@ -41,20 +40,29 @@ export default class extends Demo {
 
         engine.world.add(Factory.Body.rectangle(new Vector(0, 5), 0, 30, 1, {type: BodyType.static}));
 
-        engine.world.addBody(Factory.Body.rectangle(new Vector(-10, 0), 0, 1, 1));
-        engine.world.addBody(Factory.Body.polygon(new Vector(-8, 0), 3, 0.3, {}, {radius: 0.3}));
-        engine.world.addBody(Factory.Body.polygon(new Vector(-6, 0), 5, 0.5, {}, {radius: 0.1}));
-        engine.world.addBody(Factory.Body.polygon(new Vector(-4, 0), 8, 0.7));
-        engine.world.addBody(Factory.Body.ellipse(new Vector(-2, 0), 0.8, 0.5, 6, {}, {radius: 0.1}));
-        engine.world.addBody(Factory.Body.capsule(new Vector(0, 0), 0, 1, 0.5));
-        engine.world.addBody(Factory.Body.circle(new Vector(2, 0), 0.6));
+        // rectangle
+        engine.world.addBody(Factory.Body.rectangle(new Vector(-10, 2), 0, 1, 1));
+        // triangle
+        engine.world.addBody(Factory.Body.polygon(new Vector(-8, 2), 3, 0.3, {}, {radius: 0.3}));
+        // pentagon
+        engine.world.addBody(Factory.Body.polygon(new Vector(-6, 2), 5, 0.5, {}, {radius: 0.1}));
+        // octagon
+        engine.world.addBody(Factory.Body.polygon(new Vector(-4, 2), 8, 0.7));
+        // ellipse
+        engine.world.addBody(Factory.Body.ellipse(new Vector(-2, 2), 0.8, 0.5, 6, {}, {radius: 0.1}));
+        // capsule
+        engine.world.addBody(Factory.Body.capsule(new Vector(0, 2), 0, 1, 0.5));
+        // circle
+        engine.world.addBody(Factory.Body.circle(new Vector(2, 2), 0.6));
 
-        const cross = new Body({position: new Vector(4, 0)});
-        cross.addShape(Factory.Shape.rectangle(1.5, 0.3));
-        cross.addShape(Factory.Shape.rectangle(0.3, 1.5));
+        // cross
+        const cross = new Body({position: new Vector(4, 2)});
+        cross.addShape(Factory.Shape.rectangle(1.5, 0.4));
+        cross.addShape(Factory.Shape.rectangle(0.4, 1.5));
         engine.world.add(cross);
 
-        const arrow = Factory.Body.fromVertices(new Vector(6, 0), [
+        // arrow
+        const arrow = Factory.Body.fromVertices(new Vector(6, 2), [
             new Vector(0, -1),
             new Vector(0.8, 0.2),
             new Vector(0.2, -0.2),
@@ -65,29 +73,30 @@ export default class extends Demo {
         ]);
         engine.world.add(arrow);
 
-        const container = new Body({position: new Vector(9, 0)});
+        // container
+        const container = new Body({position: new Vector(9, 2)});
         container.addShape(Factory.Shape.rectangle(0.2, 1.5), new Vector(1.4, 0));
         container.addShape(Factory.Shape.rectangle(0.2, 1.5), new Vector(-1.4, 0));
         container.addShape(Factory.Shape.rectangle(3, 0.2), new Vector(0, 0.75));
         engine.world.add(container);
 
+        // circles
         for (let i = 0; i < 4; ++i) {
             for (let j = 0; j < 3; ++j) {
-                engine.world.add(Factory.Body.circle(new Vector(8 + i / 3 * 2 + ((j % 2 - 0.5) * 0.05), -j * 0.5), 0.25));
+                engine.world.add(Factory.Body.circle(new Vector(8 + i / 3 * 2 + ((j % 2 - 0.5) * 0.05), -j * 0.5 + 2), 0.25));
             }
         }
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

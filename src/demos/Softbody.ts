@@ -1,15 +1,13 @@
 import {
     Body,
     BodyType,
-    Composite,
-    DistanceConstraint,
+    DistJoint,
     Edge,
     Engine,
     Factory,
     Filter,
     Mouse,
-    MouseConstraint,
-    PointConstraint,
+    MouseJoint,
     Runner,
     SleepingType,
     Vector,
@@ -19,7 +17,7 @@ import { Demo } from '../demo/Demo';
 import { utils } from 'pixi.js';
 
 const softRect = (position: Vector, rows: number, columns: number, stiffness: number, radius: number) => {
-    const composite = new Composite();
+    const output = [];
     let prev: Body[] = [];
     let cur: Body[] = [];
 
@@ -28,32 +26,32 @@ const softRect = (position: Vector, rows: number, columns: number, stiffness: nu
     for (let i = 0; i < rows; ++i) {
         for (let j = 0; j < columns; ++j) {
             const body = Factory.Body.circle(new Vector((i - rows * 0.5) * d, (j - columns * 0.5) * d).add(position), radius, {}, {friction: 10});
-            composite.add(body);
+            output.push(body);
             cur.push(body);
 
             if (j > 0) {
-                composite.add(new DistanceConstraint({
+                output.push(new DistJoint({
                     bodyA: body,
                     bodyB: cur[j - 1],
                     stiffness,
                 }));
             }
             if (i > 0) {
-                composite.add(new DistanceConstraint({
+                output.push(new DistJoint({
                     bodyA: body,
                     bodyB: prev[j],
                     stiffness,
                 }));
             }
             if (i > 0 && j < columns - 1) {
-                composite.add(new DistanceConstraint({
+                output.push(new DistJoint({
                     bodyA: body,
                     bodyB: prev[j + 1],
                     stiffness,
                 }));
             }
             if (i > 0 && j > 0) {
-                composite.add(new DistanceConstraint({
+                output.push(new DistJoint({
                     bodyA: body,
                     bodyB: prev[j - 1],
                     stiffness,
@@ -63,22 +61,22 @@ const softRect = (position: Vector, rows: number, columns: number, stiffness: nu
         prev = cur;
         cur = [];
     }
-    return composite;
+    return output;
 }
 
 const softCircle = (position: Vector, radius: number, stiffness: number, count: number) => {
-    const composite = new Composite();
+    const output = [];
 
     const filter = {group: Filter.nextGroup(true)};
     const center = Factory.Body.circle(position, radius / 4);
-    composite.add(center);
+    output.push(center);
 
     const delta = new Vector(radius, 0);
     const step = Math.PI * 2 / count;
     const cos = Math.cos(step);
     const sin = Math.sin(step);
 
-    const prevPos = delta.clone().add(position);
+    const prevPos = delta.copy().add(position);
     const pos = new Vector();
 
     let first;
@@ -102,11 +100,11 @@ const softCircle = (position: Vector, radius: number, stiffness: number, count: 
             radius: 0.2,
             filter,
         }));
-        composite.add(body);
+        output.push(body);
 
         Vector.subtract(shape.start, shape.position, offset);
 
-        composite.add(new DistanceConstraint({
+        output.push(new DistJoint({
             bodyA: center,
             bodyB: body,
             pointB: offset,
@@ -116,7 +114,7 @@ const softCircle = (position: Vector, radius: number, stiffness: number, count: 
         if (i === 0) {
             first = body;
         } else if (prev) {
-            composite.add(new PointConstraint({
+            output.push(new DistJoint({
                 bodyA: body,
                 bodyB: prev,
                 pointA: offset,
@@ -125,11 +123,11 @@ const softCircle = (position: Vector, radius: number, stiffness: number, count: 
             }));
         }
         if (i === count - 1) {
-            composite.add(new PointConstraint({
+            output.push(new DistJoint({
                 bodyA: body,
                 bodyB: first,
                 pointA: Vector.subtract(shape.end, shape.position, offset),
-                pointB: offset.clone().set(offset.x, -offset.y),
+                pointB: offset.copy().set(offset.x, -offset.y),
                 stiffness: 0.5,
             }));
         }
@@ -139,7 +137,7 @@ const softCircle = (position: Vector, radius: number, stiffness: number, count: 
         pos.clone(prevPos);
     }
 
-    return composite;
+    return output;
 }
 
 export default class extends Demo {
@@ -160,8 +158,7 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
@@ -177,21 +174,20 @@ export default class extends Demo {
         circle.velocity.set(1.5, 0);
         engine.world.add(circle)
 
-        engine.world.merge(softCircle(new Vector(0, -15), 5, 0.08, 30));
-        engine.world.merge(softRect(new Vector(2, 0), 5, 15, 0.08, 0.5));
+        engine.world.add(...softCircle(new Vector(0, -15), 5, 0.08, 30));
+        engine.world.add(...softRect(new Vector(2, 0), 5, 15, 0.08, 0.5));
 
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.005,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

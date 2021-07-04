@@ -1,12 +1,11 @@
 import {
     BodyType,
-    DistanceConstraint,
-    PointConstraint,
+    DistJoint,
     Engine,
     Factory,
     Filter,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     SleepingType,
     Vector,
@@ -34,11 +33,13 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
+
+            showJoints: true,
+
             colors: {
                 shape: () => utils.rgb2hex([0.4, 0.4, 0.4]),
                 shapeOutline: () => utils.rgb2hex([0.4, 0.4, 0.4]),
@@ -58,9 +59,9 @@ export default class extends Demo {
         const filterA = {group: Filter.nextGroup(true)};
 
         let bodyA = Factory.Body.capsule(new Vector(-10, -10), Math.PI * 0.5, 1, 0.25, {}, {filter: filterA});
-        engine.world.add(bodyA);
+        engine.world.add(bodyA);    
 
-        engine.world.add(new PointConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             pointA: new Vector(-0.5, 0),
             pointB: new Vector(bodyA.position.x, bodyA.position.y - 0.5),
@@ -71,7 +72,7 @@ export default class extends Demo {
             const bodyB = Factory.Body.capsule(new Vector(-10, i - 10), Math.PI * 0.5, 1, 0.25, {}, {filter: filterA});
             engine.world.add(bodyB);
 
-            engine.world.add(new PointConstraint({
+            engine.world.add(new DistJoint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(0.5, 0),
@@ -87,19 +88,21 @@ export default class extends Demo {
         bodyA = Factory.Body.circle(new Vector(0, -10), 0.5, {}, {filter: filterB});
         engine.world.add(bodyA);
 
-        engine.world.add(new DistanceConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             pointB: new Vector(bodyA.position.x, bodyA.position.y),
             stiffness: 1,
         }));
 
-        for (let i = 1; i <= 20; ++i) {
-            const bodyB = Factory.Body.circle(new Vector(0, i - 10), 0.5, {}, {filter: filterB});
+        for (let i = 1; i <= 15; ++i) {
+            const bodyB = Factory.Body.circle(new Vector(0, i * 1.2 - 10), 0.5, {}, {filter: filterB});
             engine.world.add(bodyB);
 
-            engine.world.add(new DistanceConstraint({
+            engine.world.add(new DistJoint({
                 bodyA,
                 bodyB,
+                pointA: new Vector(0, 0.5),
+                pointB: new Vector(0, -0.5),
                 stiffness: 1,
             }));
 
@@ -111,18 +114,18 @@ export default class extends Demo {
         bodyA = Factory.Body.capsule(new Vector(10, -10), Math.PI * 0.5, 2, 0.5, {}, {filter: filterC});
         engine.world.add(bodyA);
 
-        engine.world.add(new PointConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             pointA: new Vector(-1, 0),
             pointB: new Vector(bodyA.position.x, bodyA.position.y - 1),
-            stiffness: 1,
+            stiffness: 0.1,
         }));
 
         for (let i = 1; i <= 10; ++i) {
             const bodyB = Factory.Body.capsule(new Vector(10, i * 2 - 10), Math.PI * 0.5, 2, 0.5, {}, {filter: filterC});
             engine.world.add(bodyB);
 
-            engine.world.add(new PointConstraint({
+            engine.world.add(new DistJoint({
                 bodyA,
                 bodyB,
                 pointA: new Vector(1, 0),
@@ -133,17 +136,17 @@ export default class extends Demo {
             bodyA = bodyB;
         }
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
+            
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

@@ -26,8 +26,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "quark2d": "^2.4.1",
-    "quark2d-pixi": "^0.0.15",
+    "pixi.js": "6.0.2",
+    "quark2d": "^3.0.1",
+    "quark2d-pixi": "^0.0.16",
     "vue": "~2.6"
   }
 }

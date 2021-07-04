@@ -1,9 +1,9 @@
 import {
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Ray,
     Runner,
     SleepingType,
@@ -33,8 +33,7 @@ export default class extends Demo {
         engine.gravity.set(0, 0);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
@@ -42,10 +41,13 @@ export default class extends Demo {
 
         for (let i = -7; i <= 7; ++i) {
             for (let j = -5; j <= 5; ++j) {
-                if (Math.random() < 0.1) {
+                const r = Math.random();
+                if (r < 0.1) {
                     engine.world.add(Factory.Body.circle(new Vector(i * 2.5, j * 2.5), 0.5));
+                } else if (r < 0.3) {
+                    engine.world.add(Factory.Body.capsule(new Vector(i * 2.5, j * 2.5), 0, 0.4, 0.3));
                 } else {
-                    engine.world.add(Factory.Body.polygon(new Vector(i * 2.5, j * 2.5), Math.round(Math.pow(Math.random(), 2) * 3) + 3, 0.5));
+                    engine.world.add(Factory.Body.polygon(new Vector(i * 2.5, j * 2.5), Math.round(Math.pow(Math.random(), 2) * 3) + 3, 0.4, {}, {radius: Math.random() * 0.2 + 0.3}));
                 }
             }
         }
@@ -56,30 +58,32 @@ export default class extends Demo {
         const cos = Math.cos(step);
         const sin = Math.sin(step);
         const ray = new Ray();
-        let minDist = Infinity;
-        const contactPoint = new Vector();
+        let minFraction = Infinity;
+        const points: Vector[] = [];
+        const normals: Vector[] = [];
 
-        render.mouse.events.on('mouse-move', () => {
-            ray.setFrom(render.mouse.position);
+        render.mouse.on('mouse-move', () => {
+            render.mouse.position.clone(ray.from);
         });
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
+            
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
 
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
 
             render.userGraphics.clear()
-            render.userGraphics.lineStyle(0.08, utils.rgb2hex([1, 0, 0]));
             const delta = new Vector(length, 0);
+            points.length = 0;
+            normals.length = 0;
 
             for (let i = 0; i < count; ++i) {
                 const x = delta.x;
@@ -90,30 +94,39 @@ export default class extends Demo {
                 
                 const to = Vector.add(ray.from, delta, Vector.temp[0]);
 
-                to.clone(contactPoint);
-                minDist = Math.pow(length, 2);
+                const point = to.copy();
+                const normal = new Vector();
+                minFraction = 1;
 
-                ray.setTo(to);
-                
-                const result = ray.cast(engine, engine.world, false);
+                to.clone(ray.to);
 
-                for (const intersection of result.intersections.values()) {
-                    if (!intersection.isActive) continue;
+                const result = ray.cast(engine, true, true);
 
-                    for (let j = 0; j < intersection.contactsCount; ++j) {
-                        const contact = intersection.contacts[j];
-
-                        const dist = Vector.distSquared(ray.from, contact.point);
-
-                        if (dist < minDist) {
-                            minDist = dist;
-                            contact.point.clone(contactPoint);
-                        }
+                render.userGraphics.beginFill(utils.rgb2hex([1, 0, 0]))
+                for (const intersection of result.intersections) {
+                    if (intersection.fraction < minFraction) {
+                        minFraction = intersection.fraction;
+                        intersection.point.clone(point);
+                        intersection.normal.clone(normal);
                     }
                 }
+                render.userGraphics.endFill();
 
+                points.push(point);
+                normals.push(normal);
+            }
+            
+            render.userGraphics.lineStyle(0.05, utils.rgb2hex([1, 0, 0]));
+            for (const point of points) {
                 render.userGraphics.moveTo(ray.from.x, ray.from.y);
-                render.userGraphics.lineTo(contactPoint.x, contactPoint.y);
+                render.userGraphics.lineTo(point.x, point.y);
+            }
+            render.userGraphics.lineStyle(0.05, utils.rgb2hex([0, 1, 0]));
+            for (let i = 0; i < normals.length; ++i) {
+                const normal = normals[i];
+                const point = points[i];
+                render.userGraphics.moveTo(point.x, point.y);
+                render.userGraphics.lineTo(point.x + normal.x * 0.3, point.y + normal.y * 0.3);
             }
         });
         runner.runRender();

@@ -1,12 +1,12 @@
 import {
     Body,
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Edge,
     Engine,
     Factory,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     SleepingType,
     Vector,
@@ -38,8 +38,7 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
@@ -75,7 +74,7 @@ export default class extends Demo {
                         else console.warn('avoid self-intersections');
                         polygon = [];
                     } else {
-                        polygon.push(render.mouse.position.clone());
+                        polygon.push(render.mouse.position.copy());
                     }
                     drawPolygon = !drawPolygon;
                     break;
@@ -95,7 +94,7 @@ export default class extends Demo {
             }
         });
 
-        render.mouse.events.on('mouse-move', () => {
+        render.mouse.on('mouse-move', () => {
             if (drawTerrain && Vector.distSquared(render.mouse.position, lastPosition) > 0.1) {
 
                 const body = new Body({type: BodyType.static});
@@ -106,7 +105,7 @@ export default class extends Demo {
 
             } else if (drawPolygon && Vector.distSquared(render.mouse.position, polygon[polygon.length - 1]) > 0.1) {
 
-                polygon.push(render.mouse.position.clone());
+                polygon.push(render.mouse.position.copy());
 
             } else if (drawCircle) {
 
@@ -115,17 +114,16 @@ export default class extends Demo {
             }
         });
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
 
             render.userGraphics.clear();

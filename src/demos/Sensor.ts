@@ -1,11 +1,11 @@
 import {
     Body,
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     Shape,
     SleepingType,
@@ -34,8 +34,7 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
@@ -50,7 +49,7 @@ export default class extends Demo {
             engine.world.add(Factory.Body.circle(new Vector(i * 1.1, -5), 0.5));
         }
 
-        engine.events.on('active-collisions', (event) => {
+        engine.on('active-collisions', (event) => {
             for (const pair of event.pairs) {
                 const sensorShape: Shape | undefined = pair.isSensor ? (pair.shapeA.isSensor ? pair.shapeA : pair.shapeB) : undefined;
                 if (!sensorShape) continue;
@@ -68,17 +67,16 @@ export default class extends Demo {
             }
         });
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

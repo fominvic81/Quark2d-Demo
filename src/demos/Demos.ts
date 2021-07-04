@@ -29,7 +29,7 @@ import Mixed from './performance/Mixed';
 import Cloth from './Cloth';
 import FixedRotation from './FixedRotation';
 import Shapes from './Shapes';
-import Constraints from './Constraints';
+import Joints from './Joints';
 
 export const Demos = [
     Pool,
@@ -63,5 +63,5 @@ export const Demos = [
     Cloth,
     FixedRotation,
     Shapes,
-    Constraints
+    Joints
 ];

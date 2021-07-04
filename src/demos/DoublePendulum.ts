@@ -1,11 +1,10 @@
 import {
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Filter,
     Mouse,
-    MouseConstraint,
-    PointConstraint,
+    MouseJoint,
     Runner,
     SleepingType,
     Vector,
@@ -32,14 +31,13 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
         });
 
-        engine.solver.options.constraintIterations = 5;
+        engine.solver.options.jointIterations = 5;
 
         const filter = {group: Filter.nextGroup(true)};
 
@@ -48,7 +46,7 @@ export default class extends Demo {
 
         engine.world.add(bodyA, bodyB);
 
-        engine.world.add(new PointConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             bodyB,
             pointA: new Vector(5, 0),
@@ -56,7 +54,7 @@ export default class extends Demo {
             stiffness: 0.5,
         }));
 
-        engine.world.add(new PointConstraint({
+        engine.world.add(new DistJoint({
             bodyA,
             pointA: new Vector(-5, 0),
             pointB: new Vector(0, bodyA.position.y - 5),
@@ -66,17 +64,16 @@ export default class extends Demo {
         bodyA.velocity.set(0.6, 0);
         bodyA.angularVelocity = -0.1;
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

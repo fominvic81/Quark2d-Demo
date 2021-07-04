@@ -1,12 +1,12 @@
 import {
     Body,
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Filter,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     Shape,
     ShapeType,
@@ -37,18 +37,17 @@ export default class extends Demo {
 
         const color = utils.rgb2hex([0.6, 0.6, 0.6]);
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
 
-            showConstraints: true,
-            
+            showJoints: true,
+
             colors: {
-                shape: (shape: Shape) => shape.type === ShapeType.CIRCLE ? color : Render.randomColor(),
-                shapeOutline: (shape: Shape) => shape.type === ShapeType.CIRCLE ? color : utils.rgb2hex([0.8, 0.8, 0.8]),
-                constraint: () => color,
+                shape: (shape: Shape) => shape.type === ShapeType.CIRCLE ? color : undefined,
+                shapeOutline: (shape: Shape) => shape.type === ShapeType.CIRCLE ? color : undefined,
+                joint: () => color,
             }
         });
 
@@ -70,14 +69,14 @@ export default class extends Demo {
                 cur.push(body);
 
                 if (j > 0) {
-                    engine.world.add(new DistanceConstraint({
+                    engine.world.add(new DistJoint({
                         bodyA: body,
                         bodyB: cur[j - 1],
                         stiffness: 0.25,
                     }));
                 }
                 if (i > 0) {
-                    engine.world.add(new DistanceConstraint({
+                    engine.world.add(new DistJoint({
                         bodyA: body,
                         bodyB: prev[j],
                         stiffness: 0.25,
@@ -93,17 +92,16 @@ export default class extends Demo {
         engine.world.add(circle);
         circle.velocity.set(0.8, 0);
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.05,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

@@ -1,10 +1,10 @@
 import {
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Mouse,
-    MouseConstraint,
+    MouseJoint,
     Runner,
     SleepingType,
     Vector,
@@ -37,8 +37,7 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
@@ -53,20 +52,19 @@ export default class extends Demo {
         );
 
         for (let i = 0; i < 500; ++i) {
-            engine.world.add(Factory.Body.capsule(new Vector(rand() * 25 - 12.5, rand() * 25 - 12.5), rand() * Math.PI, 0.8, 0.4, {}, {radius: 0.1}));
+            engine.world.add(Factory.Body.capsule(new Vector((rand() - 0.5) * 25, (rand() - 0.5) * 25), rand() * Math.PI, 0.8, 0.4, {}, {radius: 0.1}));
         }
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();

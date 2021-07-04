@@ -1,13 +1,12 @@
 import {
     Body,
     BodyType,
-    DistanceConstraint,
+    DistJoint,
     Engine,
     Factory,
     Filter,
     Mouse,
-    MouseConstraint,
-    PointConstraint,
+    MouseJoint,
     Runner,
     Shape,
     ShapeType,
@@ -37,14 +36,13 @@ export default class extends Demo {
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
 
         // @ts-ignore
-        const render = new Render(engine, {
-            element: element,
+        const render = new Render(engine, element, {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
             colors: {
-                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : Render.randomColor(),
-                shapeOutline: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : utils.rgb2hex([0.8, 0.8, 0.8]),
+                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
+                shapeOutline: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
             }
         });
 
@@ -58,24 +56,24 @@ export default class extends Demo {
             const bodyB = Factory.Body.capsule(new Vector(i * 2 - 19.5, 0), 0, 2, 0.5, {velocityDamping: 0.02}, {filter});
             engine.world.add(bodyB);
 
-            const constraint = new PointConstraint({
+            const joint = new DistJoint({
                 bodyA,
                 bodyB,
                 pointA: bodyA ? new Vector(1, 0) : new Vector(bodyB.position.x - 1, bodyB.position.y),
                 pointB: new Vector(-1, 0),
                 stiffness: 1,
             });
-            engine.world.add(constraint);
+            engine.world.add(joint);
 
             bodyA = bodyB;
         }
-        const constraint = new PointConstraint({
+        const joint = new DistJoint({
             bodyA,
             pointA: new Vector(1, 0),
             pointB: new Vector(bodyA!.position.x + 1, bodyA!.position.y),
             stiffness: 1,
         });
-        engine.world.add(constraint);
+        engine.world.add(joint);
 
         for (let i = 0; i < 8; ++i) {
             for (let j = 0; j < 6; ++j) {
@@ -83,17 +81,16 @@ export default class extends Demo {
             }
         }
 
-        new MouseConstraint(engine, <Mouse><unknown>render.mouse, [new DistanceConstraint({
-            stiffness: 0.001,
-            damping: 0.02,
+        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+            stiffness: 0.1,
         })]);
 
         const runner = new Runner();
 
-        runner.events.on('update', timestamp => {
+        runner.on('update', timestamp => {
             engine.update(timestamp);
         });
-        runner.events.on('render', timestamp => {
+        runner.on('render', timestamp => {
             render.update(timestamp.delta);
         });
         runner.runRender();
