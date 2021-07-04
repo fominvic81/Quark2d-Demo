@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 
-const dev = process.env.NODE_ENV === 'development';
+const dev = process.argv[process.argv.indexOf('--mode') + 1] === 'development';
 
 module.exports = {
     devtool: dev ? 'inline-cheap-source-map' : false,
