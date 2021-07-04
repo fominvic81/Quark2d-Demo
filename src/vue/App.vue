@@ -106,13 +106,47 @@
                     <label class="option-name" :for="option">{{ option }}</label>
                 </div>
             </template>
+            <div class="folder-name">Settings</div>
+            <div class="option">
+                <a class="option-name">restitutionThreshold</a>
+                <input class="input-number" type="number" v-model="Settings.restitutionThreshold">
+            </div>
+            <div class="option">
+                <a class="option-name">depthDamping</a>
+                <input class="input-number" type="number" v-model="Settings.depthDamping">
+            </div>
+            <div class="option">
+                <a class="option-name">defaultDensity</a>
+                <input class="input-number" type="number" v-model="Settings.defaultDensity">
+            </div>
+            <div class="option">
+                <a class="option-name">defaultRestitution</a>
+                <input class="input-number" type="number" v-model="Settings.defaultRestitution">
+            </div>
+            <div class="option">
+                <a class="option-name">defaultFriction</a>
+                <input class="input-number" type="number" v-model="Settings.defaultFriction">
+            </div>
+            <div class="option">
+                <a class="option-name">motionSleepLimit</a>
+                <input class="input-number" type="number" v-model="Settings.motionSleepLimit">
+            </div>
+            <div class="option">
+                <a class="option-name">collisionMotionSleepLimit</a>
+                <input class="input-number" type="number" v-model="Settings.collisionMotionSleepLimit">
+            </div>
+            <div class="option">
+                <a class="option-name">sleepyTime</a>
+                <input class="input-number" type="number" v-model="Settings.sleepyTime">
+            </div>
+            <div style="height: 40px"></div>
         </div>
         <input id="focus" type="text" style="position: absolute; opacity: 0;">
     </div>
 </template>
 
 <script>
-import { SleepingType, Vector, RunnerType} from 'quark2d';
+import { SleepingType, Vector, RunnerType, Settings } from 'quark2d';
 
 export default {
     props: {
@@ -171,9 +205,10 @@ export default {
                 timescale: 1,
                 correction: false,
             },
-            RunnerType,
             sleeping: SleepingType.NO_SLEEPING,
+            RunnerType,
             SleepingType,
+            Settings,
             gravity: new Vector(),
             info: [''],
         }
@@ -189,11 +224,12 @@ export default {
         },
         setRenderOption (event) {
             const option = event.target.id;
-            const value = event.target.checked
+            const value = event.target.checked;
             this.onSetRenderOption(option, value);
             this.renderOptions[option] = value;
         },
         changeDemo (demo, constr) {
+            document.getElementById('focus').focus();
             const renderOptions = demo.render.options;
             for (const option of Object.entries(renderOptions)) {
                 this.renderOptions[option[0]] = option[1];
@@ -211,7 +247,6 @@ export default {
     },
     created () {
         window.addEventListener('keydown', (event) => {
-            document.getElementById('focus').focus();
             if (event.key === 'p') {
                 this.togglePlay();
             } else if (event.key === 'o') {
@@ -411,6 +446,13 @@ export default {
 .info {
     color: rgb(160, 160, 160);
     font-size: x-large;
+}
+
+.input-number {
+    position: absolute;
+    width: 30%;
+    right: 4px;
+    outline: none;
 }
 
 #canvas-container {
