@@ -6,15 +6,12 @@ import { Render } from 'quark2d-pixi';
 import Vue from 'vue';
 import vueApp from './vue/App.vue';
 import { Demo, DemoConstructor } from './demo/Demo';
+import Bridge from './demos/Bridge';
 
 
 export class App {
-    demo: {
-        engine: Engine,
-        render: Render,
-        runner: Runner,
-    };
-    demoName: string;
+    demo: Demo = new Bridge(document.body);
+    demoName: string = '';
     vue: Vue;
     paused: boolean = false;
     changeDemo: {(demo: Demo, constr: DemoConstructor): void} = () => {};
@@ -22,7 +19,7 @@ export class App {
     demos: Set<DemoConstructor> = new Set();
     demoByName: Map<string, DemoConstructor> = new Map();
 
-    constructor (demos: DemoConstructor[], defaultDemo: DemoConstructor) {
+    constructor (demos: DemoConstructor[], defaultDemo: string) {
         const context = {
             props: {
                 callback: (changeDemo: {(demo: Demo, constr: DemoConstructor): void}, addDemo: {(demo: DemoConstructor): void}) => {
@@ -57,8 +54,7 @@ export class App {
                 onSetSleeping: (type: number) => {
                     this.demo.engine.sleeping.setType(type);
                 },
-                // @ts-ignore
-                codeUrl: defaultDemo.getUrl(),
+                codeUrl: '',
             },
         };
 
@@ -69,11 +65,7 @@ export class App {
         
         this.addDemo(...demos);
 
-        // @ts-ignore
-        this.demoName = defaultDemo.options.name;
-        this.demo = new defaultDemo(<HTMLElement>document.getElementById('canvas-container'));
-        this.changeDemo(this.demo, defaultDemo);
-        this.updatePaused();
+        this.setDemo(defaultDemo);
     }
 
     setDemo (demoName: string) {
@@ -105,6 +97,31 @@ export class App {
             this.demo = new demo(<HTMLElement>document.getElementById('canvas-container'));
             this.changeDemo(this.demo, demo);
             this.updatePaused();
+
+            // @ts-ignore
+            window.demo = this.demo;
+            // @ts-ignore
+            window.render = this.demo.render;
+            // @ts-ignore
+            window.runner = this.demo.runner;
+            // @ts-ignore
+            window.engine = this.demo.engine;
+            // @ts-ignore
+            window.mouseJoint = this.demo.mouseJoint;
+
+            console.clear();
+            console.log('render: ', this.demo.render);
+            console.log('runner: ', this.demo.runner);
+            console.log('engine: ', this.demo.engine);
+            console.log('mouseJoint: ', this.demo.mouseJoint);
+
+            this.demo.mouseJoint.on('catch-body', (event) => {
+                console.log('shape: ', event.shape);
+                // @ts-ignore
+                window.catchedBody = event.body;
+                // @ts-ignore
+                window.catchedShape = event.shape;
+            });
         }
     }
 

@@ -1,4 +1,4 @@
-import { Engine, Runner } from 'quark2d';
+import { Engine, MouseJoint, Runner } from 'quark2d';
 import { Render } from 'quark2d-pixi';
 
 export abstract class Demo {
@@ -11,6 +11,7 @@ export abstract class Demo {
     abstract engine: Engine;
     abstract runner: Runner;
     abstract render: Render;
+    abstract mouseJoint: MouseJoint;
 
     constructor (element: HTMLElement) {}
 

@@ -23,6 +23,7 @@ export default class extends Demo {
     engine: Engine;
     runner: Runner;
     render: Render;
+    mouseJoint: MouseJoint;
 
     constructor (element: HTMLElement) {
         super(element);
@@ -55,7 +56,7 @@ export default class extends Demo {
             engine.world.add(Factory.Body.circle(new Vector((rand() - 0.5) * 35, (rand() - 0.5) * 35), 0.5));
         }
 
-        new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
+        const mouseJoint = new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
             stiffness: 0.1,
         })]);
 
@@ -73,5 +74,6 @@ export default class extends Demo {
         this.engine = engine;
         this.runner = runner;
         this.render = render;
+        this.mouseJoint = mouseJoint;
     }
 }
