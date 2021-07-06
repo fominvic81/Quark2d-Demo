@@ -43,8 +43,8 @@ export default class extends Demo {
             scale: 20,
 
             colors: {
-                shape: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
-                shapeOutline: (shape: Shape) => shape.type === ShapeType.EDGE ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
+                shape: (shape: Shape) => (shape.type === ShapeType.EDGE && shape.body?.type === BodyType.dynamic) ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
+                shapeOutline: (shape: Shape) => (shape.type === ShapeType.EDGE && shape.body?.type === BodyType.dynamic) ? utils.rgb2hex([0.4, 0.4, 0.4]) : undefined,
             }
         });
 
@@ -53,10 +53,10 @@ export default class extends Demo {
 
         // Add walls
         engine.world.add(
-            Factory.Body.rectangle(new Vector(0, 20), 0, 60, 1, {type: BodyType.static}),
-            Factory.Body.rectangle(new Vector(0, -20), 0, 60, 1, {type: BodyType.static}),
-            Factory.Body.rectangle(new Vector(30, 0), 0, 1, 40, {type: BodyType.static}),
-            Factory.Body.rectangle(new Vector(-30, 0), 0, 1, 40, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(0, 20), 0, 60, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(0, -20), 0, 60, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(30, 0), Math.PI * 0.5, 40, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(-30, 0), Math.PI * 0.5, 40, 0.5, {type: BodyType.static}),
 
             Factory.Body.rectangle(new Vector(-22.5, -5), 0, 15, 1, {type: BodyType.static}),
             Factory.Body.rectangle(new Vector(22.5, -5), 0, 15, 1, {type: BodyType.static}),
@@ -64,7 +64,7 @@ export default class extends Demo {
             Factory.Body.rectangle(new Vector(-15.5, 10), 0, 1, 20, {type: BodyType.static}),
         );
 
-        const platform = Factory.Body.rectangle(new Vector(12.5, -5) ,0, 5, 1, {type: BodyType.kinematic}, {friction: 5});
+        const platform = Factory.Body.capsule(new Vector(12.5, -5), 0, 5, 0.5, {type: BodyType.kinematic}, {friction: 5});
         engine.world.add(platform);
 
         // Add boxes on platform
@@ -77,8 +77,11 @@ export default class extends Demo {
         let dir = 1;
 
         const mixer = new Body({type: BodyType.kinematic, position: new Vector(-22.5, 13)});
-        mixer.addShape(Factory.Shape.rectangle(12, 0.8));
-        mixer.addShape(Factory.Shape.rectangle(0.8, 12));
+        const mixerShape1 = Factory.Shape.capsule(12, 0.4);
+        const mixerShape2 = Factory.Shape.capsule(12, 0.4);
+        mixerShape2.rotate(Math.PI * 0.5);
+        mixer.addShape(mixerShape1);
+        mixer.addShape(mixerShape2);
 
         mixer.angularVelocity = 0.02;
 

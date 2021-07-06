@@ -38,10 +38,12 @@ export default class extends Demo {
             scale: 40,
         });
 
-        engine.world.add(Factory.Body.rectangle(new Vector(0, 10), 0, 20, 1, {type: BodyType.static}));
-        engine.world.add(Factory.Body.rectangle(new Vector(0, -10), 0, 20, 1, {type: BodyType.static}));
-        engine.world.add(Factory.Body.rectangle(new Vector(10, 0), 0, 1, 20, {type: BodyType.static}));
-        engine.world.add(Factory.Body.rectangle(new Vector(-10, 0), 0, 1, 20, {type: BodyType.static}));
+        engine.world.add(
+            Factory.Body.capsule(new Vector(0, 10), 0, 20, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(0, -10), 0, 20, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(10, 0), Math.PI * 0.5, 20, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(-10, 0), Math.PI * 0.5, 20, 0.5, {type: BodyType.static}),
+        );
 
         for (let i = -6; i <= 6; ++i) {
             for (let j = -6; j <= 6; ++j) {

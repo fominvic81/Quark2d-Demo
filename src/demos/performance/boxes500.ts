@@ -45,10 +45,10 @@ export default class extends Demo {
         });
 
         engine.world.add(
-            Factory.Body.rectangle(new Vector(0, 15), 0, 30, 1, {type: BodyType.static}),
-            Factory.Body.rectangle(new Vector(0, -15), 0, 30, 1, {type: BodyType.static}),
-            Factory.Body.rectangle(new Vector(15, 0), 0, 1, 30, {type: BodyType.static}),
-            Factory.Body.rectangle(new Vector(-15, 0), 0, 1, 30, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(0, 15), 0, 30, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(0, -15), 0, 30, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(15, 0), Math.PI * 0.5, 30, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(-15, 0), Math.PI * 0.5, 30, 0.5, {type: BodyType.static}),
         );
 
         for (let i = 0; i < 500; ++i) {

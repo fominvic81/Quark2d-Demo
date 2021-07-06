@@ -37,9 +37,11 @@ export default class extends Demo {
             scale: 40,
         });
 
-        engine.world.add(Factory.Body.rectangle(new Vector(0, 10), 0, 20, 1, {type: BodyType.static}));
-        engine.world.add(Factory.Body.rectangle(new Vector(-10, 0), 0, 1, 20, {type: BodyType.static}));
-        engine.world.add(Factory.Body.rectangle(new Vector(10, 0), 0, 1, 20, {type: BodyType.static}));
+        engine.world.add(
+            Factory.Body.capsule(new Vector(0, 10), 0, 20, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(10, 0), Math.PI * 0.5, 20, 0.5, {type: BodyType.static}),
+            Factory.Body.capsule(new Vector(-10, 0), Math.PI * 0.5, 20, 0.5, {type: BodyType.static})
+        );
 
         const position = Vector.temp[0];
         for (let i = 0; i < 10; ++i) {

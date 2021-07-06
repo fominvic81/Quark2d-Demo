@@ -187,7 +187,7 @@ export default {
             renderOptions: {
                 showCollisions: false,
                 showSleeping: false,
-                showConstraints: false,
+                showJoints: false,
                 showSensors: false,
                 showAABBs: false,
                 showPositions: false,
@@ -195,9 +195,8 @@ export default {
                 showBroadphase: false,
             },
             solverOptions: {
-                positionIterations: 0,
-                velocityIterations: 0,
-                constraintIterations: 0,
+                iterations: 0,
+                jointIterations: 0,
             },
             runnerOptions: {
                 type: 0,

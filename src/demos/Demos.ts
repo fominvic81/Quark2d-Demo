@@ -30,6 +30,13 @@ import Cloth from './Cloth';
 import FixedRotation from './FixedRotation';
 import Shapes from './Shapes';
 import Joints from './Joints';
+import PlayerMovement from './PlayerMovement';
+import Restitution from './Restitution';
+import StickyWheels from './StickyWheels';
+import Slingshot from './Slingshot';
+import OneWayWalls from './OneWayWalls';
+import Terrain from './Terrain';
+import Scales from './Scales';
 
 export const Demos = [
     Pool,
@@ -63,5 +70,11 @@ export const Demos = [
     Cloth,
     FixedRotation,
     Shapes,
-    Joints
+    Joints,
+    PlayerMovement,
+    Restitution,
+    StickyWheels,
+    Slingshot,
+    OneWayWalls,
+    Scales,
 ];

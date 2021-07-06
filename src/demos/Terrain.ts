@@ -1,6 +1,8 @@
 import {
+    Body,
     BodyType,
     DistJoint,
+    Edge,
     Engine,
     Factory,
     Mouse,
@@ -10,15 +12,20 @@ import {
     Vector,
 } from 'quark2d';
 import { Render } from 'quark2d-pixi';
-import { Demo } from '../../demo/Demo';
+import { Demo } from '../demo/Demo';
 
+const createLine = (start: Vector, end: Vector) => {
+    const body = new Body({type: BodyType.static});
+    body.addShape(new Edge({start, end, radius: 0.1}));
+    return body;
+}
 
 export default class extends Demo {
     static options = {
-        name: '500 circles',
-        fileName: 'performance/circles500',
-        sort: 2,
+        name: 'Terrain',
+        fileName: 'Terrain',
         info: '',
+        sort: 0,
     }
     engine: Engine;
     runner: Runner;
@@ -26,12 +33,6 @@ export default class extends Demo {
 
     constructor (element: HTMLElement) {
         super(element);
-
-        let seed = 16484;
-        const rand = () => {
-            seed = (8677 * seed + 89041) % 19763;
-            return seed / 19762;
-        }
 
         const engine = new Engine();
         engine.sleeping.setType(SleepingType.NO_SLEEPING);
@@ -41,18 +42,24 @@ export default class extends Demo {
             width: element.clientWidth,
             height: element.clientHeight,
             scale: 40,
-            showStatus: true,
         });
 
-        engine.world.add(
-            Factory.Body.capsule(new Vector(0, 15), 0, 30, 0.5, {type: BodyType.static}),
-            Factory.Body.capsule(new Vector(0, -15), 0, 30, 0.5, {type: BodyType.static}),
-            Factory.Body.capsule(new Vector(15, 0), Math.PI * 0.5, 30, 0.5, {type: BodyType.static}),
-            Factory.Body.capsule(new Vector(-15, 0), Math.PI * 0.5, 30, 0.5, {type: BodyType.static}),
-        );
+        const prevPosition = new Vector();
+        const position = new Vector();
 
-        for (let i = 0; i < 500; ++i) {
-            engine.world.add(Factory.Body.circle(new Vector((rand() - 0.5) * 20, (rand() - 0.5) * 20), 0.5));
+        for (let i = -51; i <= 50; ++i) {
+
+            position.x = i;
+            position.y = Math.sin((i - 7.5) * 0.2) + Math.cos((i - 6) * 0.3) + 8;
+            if (i > -51) engine.world.add(createLine(prevPosition, position));
+
+            position.clone(prevPosition);
+        }
+
+        for (let i = -4; i <= 4; ++i) {
+            for (let j = -2; j <= 2; ++j) {
+                engine.world.add(Factory.Body.rectangle(new Vector(i, j), 0, 1, 1),)
+            }
         }
 
         new MouseJoint(engine, <Mouse><unknown>render.mouse, [new DistJoint({
