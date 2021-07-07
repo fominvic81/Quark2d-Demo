@@ -76,5 +76,6 @@ export const Demos = [
     StickyWheels,
     Slingshot,
     OneWayWalls,
+    Terrain,
     Scales,
 ];

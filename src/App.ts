@@ -1,12 +1,10 @@
-import {
-    Engine,
-    Runner,
-} from 'quark2d';
-import { Render } from 'quark2d-pixi';
 import Vue from 'vue';
 import vueApp from './vue/App.vue';
 import { Demo, DemoConstructor } from './demo/Demo';
 import Bridge from './demos/Bridge';
+import { Plugin } from './plugins/Plugin';
+import Select from './plugins/Select';
+import Copy from './plugins/Copy';
 
 
 export class App {
@@ -18,6 +16,9 @@ export class App {
     addDemoToVue: {(demo: DemoConstructor): void} = () => {};
     demos: Set<DemoConstructor> = new Set();
     demoByName: Map<string, DemoConstructor> = new Map();
+    select: Select = new Select(this);
+    copy: Copy = new Copy(this);
+    plugins: Plugin[] = [this.select, this.copy];
 
     constructor (demos: DemoConstructor[], defaultDemo: string) {
         const context = {
@@ -64,6 +65,8 @@ export class App {
         });
         
         this.addDemo(...demos);
+
+        
 
         this.setDemo(defaultDemo);
     }
@@ -122,6 +125,10 @@ export class App {
                 // @ts-ignore
                 window.catchedShape = event.shape;
             });
+
+            for (const plugin of this.plugins) {
+                plugin.onChangeDemo(this.demo);
+            }
         }
     }
 
