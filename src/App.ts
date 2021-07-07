@@ -66,8 +66,6 @@ export class App {
         
         this.addDemo(...demos);
 
-        
-
         this.setDemo(defaultDemo);
     }
 

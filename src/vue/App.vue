@@ -2,6 +2,7 @@
     <div id="app" class="noselect">
         <div class="head">
             <div class="head-left">
+                <div class="button" @click="alertInfo()" style="width: 25px; height: min-content; font-size: 23px; font-family: monospace;"> i </div>
                 <div class="button" @click="togglePlay" title="Play/Pause(p)">
                     <svg fill="#a0a0a0" width="100%" height="100%" viewBox="0 0 36 36">
                         <path v-if="paused" d="M11,10 L18,13.74 18,22.28 11,26 M18,13.74 L26,18 26,18 18,22.28"></path>
@@ -23,9 +24,10 @@
                 <select class="demo-select" @change="(e) => {onSelectDemo(e.target.value)}">
                     <option v-for="(demo, index) in demos" :key="index"> {{ demo.options.name }} </option>
                 </select>
-                <a class="code" :href="codeUrl" target="_blank"> { } </a>
+                <a class="text" :href="codeUrl" target="_blank"> { } </a>
             </div>
             <div class="head-right">
+                <a class="text" href="https://github.com/fominvic81/Quark2d">Github</a>
             </div>
         </div>
         <a class="info-field">
@@ -242,6 +244,17 @@ export default {
         },
         addDemo (demo) {
             this.demos.push(demo);
+        },
+        alertInfo () {
+            alert(`
+                p - Pause
+                o - Single step
+                r - Restart
+                shift + drag - Select bodies.
+                ctrl + c - Copy selected bodies.
+                ctrl + v - Paste bodies.
+                delete or backspace - Delete selected bodies.
+            `);
         }
     },
     created () {
@@ -302,24 +315,30 @@ export default {
 .button {
     width: 30px;
     height: 30px;
-    margin: 5px;
+    font-size: 20px;
+    text-decoration: none;
+    color: rgb(160, 160, 160);
+    margin: 5px 2px;
     transition: all .3s;
+    transition: all .3s;
+    text-align: center;
 }
 
 .button:hover {
     background-color: rgb(0, 60, 60);
-}
+} 
 
-.code {
+.text {
     font-size: 20px;
     text-decoration: none;
     color: rgb(160, 160, 160);
-    margin: 0px 20px 0px 20px;
+    margin: 0px 8px 0px 20px;
     padding: 2px 3px 2px 3px;
     transition: all .3s;
+    text-align: center;
 }
 
-.code:hover {
+.text:hover {
     background-color: rgb(0, 60, 60);
 }
 
